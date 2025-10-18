@@ -1,11 +1,11 @@
 package by.alexeysavchic.voter_pet_project.service;
 
-import by.alexeysavchic.voter_pet_project.dto.request.UserRequset;
+import by.alexeysavchic.voter_pet_project.dto.request.UserRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 
 public interface UserService
 {
-    public UserResponse createUser(UserRequset userRequset);
+    public UserResponse createUser(UserRequest userRequest);
 
     public UserResponse findUser(String username);
 

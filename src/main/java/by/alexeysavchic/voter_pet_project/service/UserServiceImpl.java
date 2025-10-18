@@ -1,12 +1,14 @@
 package by.alexeysavchic.voter_pet_project.service;
 
-import by.alexeysavchic.voter_pet_project.dto.request.UserRequset;
+import by.alexeysavchic.voter_pet_project.dto.request.UserRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
-import by.alexeysavchic.voter_pet_project.exceptions.UserAllreadyExsistsException;
+import by.alexeysavchic.voter_pet_project.mappers.UserMapper;
+import by.alexeysavchic.voter_pet_project.exceptions.EmailAlreadyExsistException;
+import by.alexeysavchic.voter_pet_project.exceptions.NameAllreadyExsistsException;
+import by.alexeysavchic.voter_pet_project.exceptions.UserNotFoundException;
 import by.alexeysavchic.voter_pet_project.exceptions.WrongPasswordException;
 import by.alexeysavchic.voter_pet_project.repository.UserRepositoy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,50 +17,55 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService
 {
 
-    private UserRepositoy userRepositoy;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepositoy userRepositoy;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepositoy userRepositoy, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepositoy userRepositoy, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepositoy = userRepositoy;
-        this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
+        this.passwordEncoder=passwordEncoder;
+
     }
 
     @Override
     @Transactional
-    public UserResponse createUser(UserRequset userRequset)
+    public UserResponse createUser(UserRequest userRequest)
     {
-        User user=new User();
-        user.setUsername(userRequset.getUsername());
-        user.setEmail(userRequset.getEmail());
-        user.setPassword(userRequset.getPassword());
+        User user=userMapper.userRequestToUser(userRequest);
+
         if (userRepositoy.findUserByUsername(user.getUsername())==null)
         {
-        userRepositoy.save(user);
+            if (userRepositoy.findUserByEmail(user.getEmail())==null)
+            {
+                user=userRepositoy.save(user);
+
+            }
+            else
+            {
+                throw new EmailAlreadyExsistException("Email already exists");
+            }
         }
         else
         {
-            throw new UserAllreadyExsistsException("User already exists");
+            throw new NameAllreadyExsistsException("Name already exists");
         }
-
-        UserResponse userResponse = new UserResponse();
-        user=userRepositoy.findUserByUsername(user.getUsername());
-        userResponse.setId(user.getId());
-        userResponse.setUsername(user.getUsername());
-        userResponse.setEmail(user.getEmail());
-
+        UserResponse userResponse=userMapper.userToUserResponse(user);
         return userResponse;
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UserResponse findUser(String username)
     {
-        User user = new User();
-        user=userRepositoy.findUserByUsername(username);
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setUsername(user.getUsername());
-        userResponse.setEmail(user.getEmail());
+
+        User user=userRepositoy.findUserByUsername(username);
+        if (user==null)
+        {
+            throw new UserNotFoundException("User not found");
+        }
+
+        UserResponse userResponse=userMapper.userToUserResponse(user);
 
         return userResponse;
     }
@@ -67,41 +74,38 @@ public class UserServiceImpl implements UserService
     @Transactional
     public UserResponse changeUsername(String nameForChanging, String newName)
     {
-        User user = new User();
-        user=userRepositoy.findUserByUsername(nameForChanging);
-        user.setUsername(newName);
-        userRepositoy.save(user);
-
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setUsername(user.getUsername());
-        userResponse.setEmail(user.getEmail());
-
-        return userResponse;
+        if (userRepositoy.findUserByUsername(newName)==null) {
+            User user = userRepositoy.findUserByUsername(nameForChanging);
+            user.setUsername(newName);
+            user=userRepositoy.save(user);
+            UserResponse userResponse=userMapper.userToUserResponse(user);
+            return userResponse;
+        }
+        else
+        {
+            throw new NameAllreadyExsistsException("Name already exists");
+        }
     }
 
     @Override
     @Transactional
     public UserResponse changePassword(String name, String passwordForChanging, String newPassword)
     {
-        User user = new User();
-        user=userRepositoy.findUserByUsername(name);
-        if (user.getPassword().equals(passwordForChanging))
+        User user=userRepositoy.findUserByUsername(name);
+
+        if (passwordEncoder.matches(passwordForChanging, newPassword))
         {
-        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepositoy.save(user);
+
+        UserResponse userResponse=userMapper.userToUserResponse(user);
+        return userResponse;
         }
         else
         {
-            throw new WrongPasswordException("Wron Password");
+            throw new WrongPasswordException("Wrong Password");
         }
-        userRepositoy.save(user);
 
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setUsername(user.getUsername());
-        userResponse.setEmail(user.getEmail());
-
-        return userResponse;
     }
 
     @Override
@@ -109,14 +113,15 @@ public class UserServiceImpl implements UserService
     public UserResponse changeEmail(String name, String emailForChanging, String newEmail)
     {
         User user = new User();
+        if (userRepositoy.findUserByEmail(newEmail)==null)
+        {
         user=userRepositoy.findUserByUsername(name);
         user.setEmail(newEmail);
-        userRepositoy.save(user);
+        user=userRepositoy.save(user);
+        }
 
         UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setUsername(user.getUsername());
-        userResponse.setEmail(user.getEmail());
+        userResponse=userMapper.userToUserResponse(user);
 
         return userResponse;
     }

@@ -1,6 +1,6 @@
 package by.alexeysavchic.voter_pet_project.dto.request;
 
-public class UserRequset
+public class UserRequest
 {
     private String username;
 
@@ -8,10 +8,10 @@ public class UserRequset
 
     private String email;
 
-    public UserRequset() {
+    public UserRequest() {
     }
 
-    public UserRequset(String username, String password, String email) {
+    public UserRequest(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
