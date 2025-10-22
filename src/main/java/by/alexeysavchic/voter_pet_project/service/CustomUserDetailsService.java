@@ -1,0 +1,29 @@
+package by.alexeysavchic.voter_pet_project.service;
+
+import by.alexeysavchic.voter_pet_project.entity.User;
+import by.alexeysavchic.voter_pet_project.repository.UserRepositoy;
+import by.alexeysavchic.voter_pet_project.security.CustomUserDetails;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CustomUserDetailsService implements UserDetailsService
+{
+    private final UserRepositoy userRepository;
+
+    public CustomUserDetailsService(UserRepositoy userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findUserByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+
+        return new CustomUserDetails(user);
+    }
+}

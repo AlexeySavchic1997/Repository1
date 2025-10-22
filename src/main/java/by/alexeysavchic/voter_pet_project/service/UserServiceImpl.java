@@ -1,10 +1,8 @@
 package by.alexeysavchic.voter_pet_project.service;
 
-import by.alexeysavchic.voter_pet_project.dto.request.UserRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.mappers.UserMapper;
-import by.alexeysavchic.voter_pet_project.exceptions.EmailAlreadyExsistException;
 import by.alexeysavchic.voter_pet_project.exceptions.NameAllreadyExsistsException;
 import by.alexeysavchic.voter_pet_project.exceptions.UserNotFoundException;
 import by.alexeysavchic.voter_pet_project.exceptions.WrongPasswordException;
@@ -28,31 +26,7 @@ public class UserServiceImpl implements UserService
 
     }
 
-    @Override
-    @Transactional
-    public UserResponse createUser(UserRequest userRequest)
-    {
-        User user=userMapper.userRequestToUser(userRequest);
 
-        if (userRepositoy.findUserByUsername(user.getUsername())==null)
-        {
-            if (userRepositoy.findUserByEmail(user.getEmail())==null)
-            {
-                user=userRepositoy.save(user);
-
-            }
-            else
-            {
-                throw new EmailAlreadyExsistException("Email already exists");
-            }
-        }
-        else
-        {
-            throw new NameAllreadyExsistsException("Name already exists");
-        }
-        UserResponse userResponse=userMapper.userToUserResponse(user);
-        return userResponse;
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -93,7 +67,7 @@ public class UserServiceImpl implements UserService
     {
         User user=userRepositoy.findUserByUsername(name);
 
-        if (passwordEncoder.matches(passwordForChanging, newPassword))
+        if (passwordEncoder.matches(passwordForChanging, user.getPassword()))
         {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepositoy.save(user);
@@ -120,8 +94,7 @@ public class UserServiceImpl implements UserService
         user=userRepositoy.save(user);
         }
 
-        UserResponse userResponse = new UserResponse();
-        userResponse=userMapper.userToUserResponse(user);
+        UserResponse userResponse = userMapper.userToUserResponse(user);
 
         return userResponse;
     }

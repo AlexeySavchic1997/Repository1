@@ -1,0 +1,78 @@
+package by.alexeysavchic.voter_pet_project.service;
+
+
+import by.alexeysavchic.voter_pet_project.dto.request.LoginRequest;
+import by.alexeysavchic.voter_pet_project.dto.request.RegisterRequest;
+import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
+import by.alexeysavchic.voter_pet_project.entity.User;
+import by.alexeysavchic.voter_pet_project.exceptions.EmailAlreadyExsistException;
+import by.alexeysavchic.voter_pet_project.exceptions.NameAllreadyExsistsException;
+import by.alexeysavchic.voter_pet_project.mappers.UserMapper;
+import by.alexeysavchic.voter_pet_project.repository.UserRepositoy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class AuthServiceImpl implements AuthService
+{
+    private final UserRepositoy userRepositoy;
+    private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
+    private final AuthenticationManager authenticationManager;
+
+
+    public AuthServiceImpl(UserRepositoy userRepositoy, PasswordEncoder passwordEncoder, UserMapper userMapper, AuthenticationManager authenticationManager) {
+        this.userRepositoy = userRepositoy;
+        this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
+        this.authenticationManager = authenticationManager;
+    }
+
+    @Transactional
+    @Override
+    public UserResponse signup(RegisterRequest registerRequest)
+    {
+        User user=userMapper.userRequestToUser(registerRequest);
+
+        if (userRepositoy.findUserByUsername(user.getUsername())==null)
+        {
+            if (userRepositoy.findUserByEmail(user.getEmail())==null)
+            {
+                user=userRepositoy.save(user);
+
+            }
+            else
+            {
+                throw new EmailAlreadyExsistException("Email already exists");
+            }
+        }
+        else
+        {
+            throw new NameAllreadyExsistsException("Name already exists");
+        }
+        UserResponse userResponse=userMapper.userToUserResponse(user);
+        return userResponse;
+    }
+
+    @Transactional
+    @Override
+    public UserResponse login(LoginRequest loginRequest)
+    {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        User user = userRepositoy.findUserByUsername(loginRequest.getUsername());
+        return userMapper.userToUserResponse(user);
+
+    }
+}

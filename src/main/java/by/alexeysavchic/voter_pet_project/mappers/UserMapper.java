@@ -1,9 +1,8 @@
 package by.alexeysavchic.voter_pet_project.mappers;
 
-import by.alexeysavchic.voter_pet_project.dto.request.UserRequest;
+import by.alexeysavchic.voter_pet_project.dto.request.RegisterRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +15,12 @@ public class UserMapper
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User userRequestToUser(UserRequest userRequest)
+    public User userRequestToUser(RegisterRequest registerRequest)
     {
         User user = new User();
-        user.setUsername(userRequest.getUsername());
-        user.setEmail(userRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setUsername(registerRequest.getUsername());
+        user.setEmail(registerRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
         return user;
     }

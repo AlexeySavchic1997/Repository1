@@ -1,6 +1,6 @@
 package by.alexeysavchic.voter_pet_project.dto.request;
 
-public class UserRequest
+public class RegisterRequest
 {
     private String username;
 
@@ -8,13 +8,7 @@ public class UserRequest
 
     private String email;
 
-    public UserRequest() {
-    }
-
-    public UserRequest(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
+    public RegisterRequest() {
     }
 
     public String getUsername() {
