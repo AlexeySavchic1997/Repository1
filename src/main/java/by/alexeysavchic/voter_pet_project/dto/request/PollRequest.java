@@ -1,8 +1,6 @@
 package by.alexeysavchic.voter_pet_project.dto.request;
 
 
-import by.alexeysavchic.voter_pet_project.entity.Option;
-
 import java.util.List;
 
 public class PollRequest
@@ -11,7 +9,10 @@ public class PollRequest
 
     private String description;
 
+    private int duration;
+
     private List<String> options;
+
 
     public PollRequest() {
     }
@@ -32,6 +33,14 @@ public class PollRequest
         this.description = description;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
     public List<String> getOptions() {
         return options;
     }
@@ -39,4 +48,6 @@ public class PollRequest
     public void setOptions(List<String> options) {
         this.options = options;
     }
+
+
 }

@@ -5,28 +5,26 @@ import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.PollResponse;
 import by.alexeysavchic.voter_pet_project.entity.Option;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
-import by.alexeysavchic.voter_pet_project.repository.UserRepositoy;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class PollMapper
 {
-    UserRepositoy userRepositoy;
+    private final UserMapper userMapper;
 
-    UserMapper userMapper;
+    public PollMapper(UserMapper userMapper)
+    {
 
-    public PollMapper(UserRepositoy userRepositoy, UserMapper userMapper) {
-        this.userRepositoy = userRepositoy;
         this.userMapper = userMapper;
     }
 
-    public Poll pollRequestToPoll(PollRequest pollRequest, long id)
+    public Poll pollRequestToPoll(PollRequest pollRequest)
     {
         Poll poll = new Poll();
-        poll.setCreatedBy(userRepositoy.getById(id));
         poll.setQuestion(pollRequest.getQuestion());
         poll.setDescription(pollRequest.getDescription());
         List<Option> options = new ArrayList<>();
@@ -38,6 +36,9 @@ public class PollMapper
             options.add(option);
         }
         poll.setOptions(options);
+        LocalDateTime creationTime=LocalDateTime.now();
+        poll.setCreationTime(creationTime);
+        poll.setEndingTime(creationTime.plusDays(pollRequest.getDuration()));
 
         return poll;
     }

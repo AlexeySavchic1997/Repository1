@@ -1,12 +1,15 @@
-package by.alexeysavchic.voter_pet_project.dto.response;
+package by.alexeysavchic.voter_pet_project.dto.request;
 
-public class VoteResponse
+public class VoteRequest
 {
     String pollName;
 
     String OptionName;
 
-    public VoteResponse(String pollName, String optionName) {
+    public VoteRequest() {
+    }
+
+    public VoteRequest(String pollName, String optionName) {
         this.pollName = pollName;
         OptionName = optionName;
     }

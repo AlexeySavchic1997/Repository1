@@ -22,14 +22,12 @@ public class AuthController
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponse> signup(@RequestBody RegisterRequest request) {
-        UserResponse response = authService.signup(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public UserResponse signup(@RequestBody RegisterRequest request) {
+        return authService.signup(request);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@RequestBody LoginRequest request) {
-        UserResponse response = authService.login(request);
-        return ResponseEntity.ok(response);
+    public UserResponse login(@RequestBody LoginRequest request) {
+        return authService.login(request);
     }
 }

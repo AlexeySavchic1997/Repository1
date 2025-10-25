@@ -4,6 +4,7 @@ package by.alexeysavchic.voter_pet_project.entity;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -41,6 +42,12 @@ public class User
         this.votes = votes;
         this.createdPolls = createdPolls;
     }
+
+    public void addVote(Vote vote)
+    {
+        votes.add(vote);
+    }
+
 
     public long getId() {
         return id;
@@ -88,5 +95,17 @@ public class User
 
     public void setCreatedPolls(List<Poll> createdPolls) {
         this.createdPolls = createdPolls;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return getId() == user.getId() && getUsername().equals(user.getUsername()) && getEmail().equals(user.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername(), getEmail());
     }
 }

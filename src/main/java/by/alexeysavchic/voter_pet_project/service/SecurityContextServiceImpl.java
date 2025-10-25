@@ -5,7 +5,6 @@ import by.alexeysavchic.voter_pet_project.repository.UserRepositoy;
 import by.alexeysavchic.voter_pet_project.security.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 public class SecurityContextServiceImpl implements SecurityContextService {

@@ -15,7 +15,7 @@ public class UserMapper
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User userRequestToUser(RegisterRequest registerRequest)
+    public User registerUserToUser(RegisterRequest registerRequest)
     {
         User user = new User();
         user.setUsername(registerRequest.getUsername());

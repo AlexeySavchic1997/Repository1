@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "polls")
@@ -44,6 +45,30 @@ public class Poll
         this.endingTime = endingTime;
         this.createdBy = createdBy;
         this.options = options;
+    }
+
+    public Option getOption(String text)
+    {
+        for (Option option:options)
+        {
+            if (option.getText().equals(text))
+            {
+                return option;
+            }
+        }
+        return null;
+    }
+
+    public boolean isActive()
+    {
+        if (LocalDateTime.now().isBefore(endingTime))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public long getId() {
@@ -100,5 +125,18 @@ public class Poll
 
     public void setOptions(List<Option> options) {
         this.options = options;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Poll poll)) return false;
+        return getId() == poll.getId() && getQuestion().equals(poll.getQuestion()) && getDescription().equals(poll.getDescription()) && getCreationTime().equals(poll.getCreationTime())
+                && getEndingTime().equals(poll.getEndingTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getQuestion(), getDescription(), getCreationTime(), getEndingTime(), getCreatedBy(), getOptions());
     }
 }

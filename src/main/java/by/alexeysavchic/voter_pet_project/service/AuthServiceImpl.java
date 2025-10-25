@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService
     @Override
     public UserResponse signup(RegisterRequest registerRequest)
     {
-        User user=userMapper.userRequestToUser(registerRequest);
+        User user=userMapper.registerUserToUser(registerRequest);
 
         if (userRepositoy.findUserByUsername(user.getUsername())==null)
         {
