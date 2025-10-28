@@ -2,6 +2,7 @@ package by.alexeysavchic.voter_pet_project.mappers;
 
 
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
+import by.alexeysavchic.voter_pet_project.dto.response.AllPollsResponse;
 import by.alexeysavchic.voter_pet_project.dto.response.PollResponse;
 import by.alexeysavchic.voter_pet_project.entity.Option;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
@@ -57,6 +58,13 @@ public class PollMapper
         {
             options.add(option.getText());
         }
+        pollResponse.setOptions(options);
         return pollResponse;
+    }
+
+    public AllPollsResponse pollToAllPollsResponse(Poll poll)
+    {
+        AllPollsResponse response = new AllPollsResponse(poll.getId(),poll.getQuestion());
+        return response;
     }
 }

@@ -3,27 +3,28 @@ package by.alexeysavchic.voter_pet_project.service;
 import by.alexeysavchic.voter_pet_project.dto.request.ChangePasswordRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
-import by.alexeysavchic.voter_pet_project.exceptions.EmailAlreadyExsistException;
+import by.alexeysavchic.voter_pet_project.exceptions.*;
 import by.alexeysavchic.voter_pet_project.mappers.UserMapper;
-import by.alexeysavchic.voter_pet_project.exceptions.NameAllreadyExsistsException;
-import by.alexeysavchic.voter_pet_project.exceptions.UserNotFoundException;
-import by.alexeysavchic.voter_pet_project.exceptions.WrongPasswordException;
-import by.alexeysavchic.voter_pet_project.repository.UserRepositoy;
+import by.alexeysavchic.voter_pet_project.repository.UserRepository;
+import by.alexeysavchic.voter_pet_project.security.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService
 {
 
-    private final UserRepositoy userRepositoy;
+    private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final SecurityContextServiceImpl securityContextService;
 
-    public UserServiceImpl(UserRepositoy userRepositoy, UserMapper userMapper, PasswordEncoder passwordEncoder, SecurityContextServiceImpl securityContextService) {
-        this.userRepositoy = userRepositoy;
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, SecurityContextServiceImpl securityContextService) {
+        this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.securityContextService = securityContextService;
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService
     public UserResponse findUser(String username)
     {
 
-        User user=userRepositoy.findUserByUsername(username);
+        User user= userRepository.findUserByUsername(username);
         if (user==null)
         {
             throw new UserNotFoundException("User not found");
@@ -46,16 +47,29 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<UserResponse> getAllUsers()
+    {
+        List<UserResponse> response = new ArrayList<>();
+        List<User> users= userRepository.findAll();
+        for(User user: users)
+        {
+            response.add(userMapper.userToUserResponse(user));
+        }
+        return response;
+    }
+
+    @Override
     @Transactional
     public UserResponse changeUsername(String newName)
     {
-        if (userRepositoy.findUserByUsername(newName)!=null)
+        if (userRepository.findUserByUsername(newName)!=null)
         {
             throw new NameAllreadyExsistsException("Name already exists");
         }
         User user =securityContextService.getCurrentUser();
         user.setUsername(newName);
-        userRepositoy.save(user);
+        userRepository.save(user);
         UserResponse userResponse = userMapper.userToUserResponse(user);
         return userResponse;
     }
@@ -69,7 +83,7 @@ public class UserServiceImpl implements UserService
         if (passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
         {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        userRepositoy.save(user);
+        userRepository.save(user);
 
         UserResponse userResponse=userMapper.userToUserResponse(user);
         return userResponse;
@@ -85,18 +99,37 @@ public class UserServiceImpl implements UserService
     @Transactional
     public UserResponse changeEmail(String newEmail)
     {
-        User user = new User();
-        if (userRepositoy.findUserByEmail(newEmail)!=null)
+        if (userRepository.findUserByEmail(newEmail)!=null)
         {
         throw new EmailAlreadyExsistException("Email already exists");
         }
-        user=securityContextService.getCurrentUser();
+        User user=securityContextService.getCurrentUser();
         user.setEmail(newEmail);
-        user=userRepositoy.save(user);
+        user= userRepository.save(user);
 
         UserResponse userResponse = userMapper.userToUserResponse(user);
 
         return userResponse;
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long id)
+    {
+        User user = userRepository.findUserById(id);
+        if (user==null)
+        {
+            throw new UserNotFoundException("user not found");
+        }
+        if ((securityContextService.getCurrentUser().hasRole(Role.ROLE_ADMIN))||
+        securityContextService.getCurrentUser().equals(user))
+        {
+            userRepository.delete(user);
+        }
+        else
+        {
+            throw new OperationDeniedException("operation denied");
+        }
     }
 
 

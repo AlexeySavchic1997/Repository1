@@ -13,11 +13,13 @@ import by.alexeysavchic.voter_pet_project.exceptions.PoolNotExistException;
 import by.alexeysavchic.voter_pet_project.exceptions.UserAlreadyVotedException;
 import by.alexeysavchic.voter_pet_project.repository.PollRepository;
 import by.alexeysavchic.voter_pet_project.repository.VoteRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class VoteServiceImpl implements VoteService
 {
     private final VoteRepository voteRepository;
@@ -50,7 +52,7 @@ public class VoteServiceImpl implements VoteService
 
        User user = securityContextService.getCurrentUser();
 
-       if (!voteRepository.existsByUserAndOption_Poll(user, poll))
+       if (voteRepository.existsByUserAndOption_Poll(user, poll))
        {
             throw new UserAlreadyVotedException("User already voted");
        }
@@ -72,6 +74,10 @@ public class VoteServiceImpl implements VoteService
     public List<CountingResponce> voteCounting(String question)
     {
         Poll poll=pollRepository.findPollByQuestion(question);
+        if (poll==null)
+        {
+            throw new PoolNotExistException("poll not exist");
+        }
         List<Option> options = poll.getOptions();
         List<CountingResponce> response = new ArrayList<>();
 

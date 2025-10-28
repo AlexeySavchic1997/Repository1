@@ -31,6 +31,7 @@ public class UserMapper
         userResponse.setId(user.getId());
         userResponse.setUsername(user.getUsername());
         userResponse.setEmail(user.getEmail());
+        userResponse.setRoles(user.getRoles());
 
         return userResponse;
     }

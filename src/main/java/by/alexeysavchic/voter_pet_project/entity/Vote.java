@@ -2,8 +2,6 @@ package by.alexeysavchic.voter_pet_project.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "votes")
 public class Vote
@@ -13,11 +11,11 @@ public class Vote
     @Column(name = "id")
     private long id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "option_id")
     private Option option;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 

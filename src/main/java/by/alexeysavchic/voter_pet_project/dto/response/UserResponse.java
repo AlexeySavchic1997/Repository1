@@ -1,5 +1,9 @@
 package by.alexeysavchic.voter_pet_project.dto.response;
 
+import by.alexeysavchic.voter_pet_project.security.Role;
+
+import java.util.Set;
+
 public class UserResponse
 {
     private long id;
@@ -7,6 +11,8 @@ public class UserResponse
     private String username;
 
     private String email;
+
+    private Set<Role> roles;
 
     public UserResponse() {
     }
@@ -33,5 +39,13 @@ public class UserResponse
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

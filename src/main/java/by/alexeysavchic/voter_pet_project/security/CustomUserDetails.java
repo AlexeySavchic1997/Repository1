@@ -6,7 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails
 {
@@ -21,8 +21,11 @@ public class CustomUserDetails implements UserDetails
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+    public Collection<? extends GrantedAuthority> getAuthorities()
+    {
+        return user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.name()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -61,6 +64,20 @@ public class CustomUserDetails implements UserDetails
 
     public String getEmail() {
         return user.getEmail();
+    }
+
+    public boolean hasRole(Role role)
+    {
+        return user.getRoles().contains(role);
+    }
+
+    public boolean isModerator()
+    {
+        return hasRole(Role.ROLE_MODERATOR);
+    }
+    public boolean isAdmin()
+    {
+        return hasRole(Role.ROLE_ADMIN);
     }
 
 }

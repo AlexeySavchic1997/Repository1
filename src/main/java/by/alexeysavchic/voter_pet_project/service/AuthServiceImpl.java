@@ -8,10 +8,12 @@ import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exceptions.EmailAlreadyExsistException;
 import by.alexeysavchic.voter_pet_project.exceptions.NameAllreadyExsistsException;
 import by.alexeysavchic.voter_pet_project.mappers.UserMapper;
-import by.alexeysavchic.voter_pet_project.repository.UserRepositoy;
+import by.alexeysavchic.voter_pet_project.repository.UserRepository;
+import by.alexeysavchic.voter_pet_project.security.CustomUserDetails;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,14 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthServiceImpl implements AuthService
 {
-    private final UserRepositoy userRepositoy;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final AuthenticationManager authenticationManager;
 
 
-    public AuthServiceImpl(UserRepositoy userRepositoy, PasswordEncoder passwordEncoder, UserMapper userMapper, AuthenticationManager authenticationManager) {
-        this.userRepositoy = userRepositoy;
+    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper, AuthenticationManager authenticationManager) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.authenticationManager = authenticationManager;
@@ -39,11 +41,11 @@ public class AuthServiceImpl implements AuthService
     {
         User user=userMapper.registerUserToUser(registerRequest);
 
-        if (userRepositoy.findUserByUsername(user.getUsername())==null)
+        if (userRepository.findUserByUsername(user.getUsername())==null)
         {
-            if (userRepositoy.findUserByEmail(user.getEmail())==null)
+            if (userRepository.findUserByEmail(user.getEmail())==null)
             {
-                user=userRepositoy.save(user);
+                user= userRepository.save(user);
 
             }
             else
@@ -70,8 +72,12 @@ public class AuthServiceImpl implements AuthService
                 )
         );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = userRepositoy.findUserByUsername(loginRequest.getUsername());
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userDetails.getUser();
         return userMapper.userToUserResponse(user);
 
     }

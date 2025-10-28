@@ -1,5 +1,4 @@
 package by.alexeysavchic.voter_pet_project.dto.response;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

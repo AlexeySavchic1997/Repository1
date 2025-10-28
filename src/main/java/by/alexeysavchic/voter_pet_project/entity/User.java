@@ -1,10 +1,13 @@
 package by.alexeysavchic.voter_pet_project.entity;
 
 
+import by.alexeysavchic.voter_pet_project.security.Role;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -31,6 +34,12 @@ public class User
 
     @OneToMany(mappedBy = "createdBy")
     private List<Poll> createdPolls;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -108,4 +117,10 @@ public class User
     public int hashCode() {
         return Objects.hash(getId(), getUsername(), getEmail());
     }
+
+    public Set<Role> getRoles() { return roles; }
+    public void setRoles(Set<Role> roles) { this.roles = roles; }
+    public void addRole(Role role) { this.roles.add(role); }
+    public void removeRole(Role role) { this.roles.remove(role); }
+    public boolean hasRole(Role role) { return this.roles.contains(role); }
 }

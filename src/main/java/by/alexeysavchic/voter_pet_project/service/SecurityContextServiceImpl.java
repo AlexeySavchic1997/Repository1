@@ -1,17 +1,19 @@
 package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.entity.User;
-import by.alexeysavchic.voter_pet_project.repository.UserRepositoy;
+import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.security.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class SecurityContextServiceImpl implements SecurityContextService {
-    private final UserRepositoy userRepositoy;
+    private final UserRepository userRepository;
 
-    public SecurityContextServiceImpl(UserRepositoy userRepositoy) {
-        this.userRepositoy = userRepositoy;
+    public SecurityContextServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
