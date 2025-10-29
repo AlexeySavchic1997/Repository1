@@ -6,7 +6,9 @@ import by.alexeysavchic.voter_pet_project.exceptions.UserNotFoundException;
 import by.alexeysavchic.voter_pet_project.mappers.UserMapper;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RoleServiceImpl implements RoleService
 {
 

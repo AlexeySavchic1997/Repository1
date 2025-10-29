@@ -6,7 +6,7 @@ import by.alexeysavchic.voter_pet_project.dto.response.PollResponse;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exceptions.OperationDeniedException;
-import by.alexeysavchic.voter_pet_project.exceptions.PoolNotExistException;
+import by.alexeysavchic.voter_pet_project.exceptions.PollNotExistException;
 import by.alexeysavchic.voter_pet_project.mappers.PollMapper;
 import by.alexeysavchic.voter_pet_project.repository.PollRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
@@ -68,7 +68,7 @@ public class PollServiceImpl implements PollService
         Poll poll = pollRepository.findPollById(id);
         if (poll==null)
         {
-            throw new PoolNotExistException("Poll don't exist");
+            throw new PollNotExistException("Poll don't exist");
         }
         if ((securityContextService.getCurrentUser().equals(poll.getCreatedBy()))||
                 (securityContextService.getCurrentUser().hasRole(Role.ROLE_ADMIN))||

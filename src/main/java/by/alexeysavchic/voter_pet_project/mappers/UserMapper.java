@@ -3,6 +3,7 @@ package by.alexeysavchic.voter_pet_project.mappers;
 import by.alexeysavchic.voter_pet_project.dto.request.RegisterRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
+import by.alexeysavchic.voter_pet_project.security.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,7 @@ public class UserMapper
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.addRole(Role.ROLE_USER);
 
         return user;
     }

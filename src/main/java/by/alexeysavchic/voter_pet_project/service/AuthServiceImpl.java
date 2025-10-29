@@ -46,7 +46,6 @@ public class AuthServiceImpl implements AuthService
             if (userRepository.findUserByEmail(user.getEmail())==null)
             {
                 user= userRepository.save(user);
-
             }
             else
             {

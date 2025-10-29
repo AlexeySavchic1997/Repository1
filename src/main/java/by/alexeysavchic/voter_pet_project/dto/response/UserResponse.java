@@ -48,4 +48,6 @@ public class UserResponse
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public boolean hasRole(Role role) { return this.roles.contains(role); }
 }

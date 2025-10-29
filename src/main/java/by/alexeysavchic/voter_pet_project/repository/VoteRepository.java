@@ -1,6 +1,5 @@
 package by.alexeysavchic.voter_pet_project.repository;
 
-import by.alexeysavchic.voter_pet_project.entity.Option;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.entity.Vote;

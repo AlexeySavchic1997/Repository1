@@ -7,17 +7,16 @@ import by.alexeysavchic.voter_pet_project.entity.Option;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.entity.Vote;
-import by.alexeysavchic.voter_pet_project.exceptions.OptionNotFoundException;
-import by.alexeysavchic.voter_pet_project.exceptions.PollAlreadyEndedException;
-import by.alexeysavchic.voter_pet_project.exceptions.PoolNotExistException;
-import by.alexeysavchic.voter_pet_project.exceptions.UserAlreadyVotedException;
+import by.alexeysavchic.voter_pet_project.exceptions.*;
 import by.alexeysavchic.voter_pet_project.repository.PollRepository;
+import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.repository.VoteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VoteServiceImpl implements VoteService
@@ -26,11 +25,14 @@ public class VoteServiceImpl implements VoteService
 
     private final PollRepository pollRepository;
 
+    private final UserRepository userRepository;
+
     private final SecurityContextServiceImpl securityContextService;
 
-    public VoteServiceImpl(VoteRepository voteRepository, PollRepository pollRepository, SecurityContextServiceImpl securityContextService) {
+    public VoteServiceImpl(VoteRepository voteRepository, PollRepository pollRepository, UserRepository userRepository, SecurityContextServiceImpl securityContextService) {
         this.voteRepository = voteRepository;
         this.pollRepository = pollRepository;
+        this.userRepository = userRepository;
         this.securityContextService = securityContextService;
     }
 
@@ -41,16 +43,19 @@ public class VoteServiceImpl implements VoteService
        Poll poll = pollRepository.findPollByQuestion(voteRequest.getPollName());
        if (poll==null)
        {
-            throw new PoolNotExistException("Poll doesn't exist");
+            throw new PollNotExistException("Poll doesn't exist");
        }
        if (!poll.isActive())
        {
            throw new PollAlreadyEndedException("Poll already end");
        }
+
        Option option = poll.getOptions().stream().filter(opt -> opt.getText().equals(voteRequest.getOptionName())).
                findFirst().orElseThrow(()->new OptionNotFoundException("Option not found"));
 
-       User user = securityContextService.getCurrentUser();
+
+       User user = userRepository.findById(securityContextService.getCurrentUser().getId())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
        if (voteRepository.existsByUserAndOption_Poll(user, poll))
        {
@@ -76,7 +81,7 @@ public class VoteServiceImpl implements VoteService
         Poll poll=pollRepository.findPollByQuestion(question);
         if (poll==null)
         {
-            throw new PoolNotExistException("poll not exist");
+            throw new PollNotExistException("Poll doesn't exist");
         }
         List<Option> options = poll.getOptions();
         List<CountingResponce> response = new ArrayList<>();

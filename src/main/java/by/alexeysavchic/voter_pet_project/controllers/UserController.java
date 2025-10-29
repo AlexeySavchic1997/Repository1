@@ -4,12 +4,17 @@ import by.alexeysavchic.voter_pet_project.dto.request.ChangePasswordRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 import by.alexeysavchic.voter_pet_project.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
+@Validated
 public class UserController
 {
     private final UserService userService;
@@ -31,13 +36,13 @@ public class UserController
     }
 
     @PutMapping("/change_name")
-    public UserResponse changeUsername(@RequestParam String newName)
+    public UserResponse changeUsername(@RequestParam @NotBlank @Size(min = 2, max = 30) String newName)
     {
         return userService.changeUsername(newName);
     }
 
     @PutMapping("/change_email")
-    public UserResponse changeEmail(@RequestParam String newEmail)
+    public UserResponse changeEmail(@RequestParam @NotBlank @Email String newEmail)
     {
         return userService.changeEmail(newEmail);
     }

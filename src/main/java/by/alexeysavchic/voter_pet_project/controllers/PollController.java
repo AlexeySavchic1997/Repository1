@@ -25,11 +25,13 @@ public class PollController
     {
         return pollService.getAllPolls();
     }
+
     @PostMapping("/create_poll")
     public PollResponse createPoll(@Valid @RequestBody PollRequest request)
     {
         return pollService.createPoll(request);
     }
+
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

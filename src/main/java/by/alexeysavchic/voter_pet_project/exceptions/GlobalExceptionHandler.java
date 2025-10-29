@@ -23,7 +23,7 @@ public class GlobalExceptionHandler
 
     @ExceptionHandler({
             UserNotFoundException.class,
-            PoolNotExistException.class,
+            PollNotExistException.class,
             OptionNotFoundException.class
     })
     public ResponseEntity<String> handleNotFoundExceptions(RuntimeException ex) {

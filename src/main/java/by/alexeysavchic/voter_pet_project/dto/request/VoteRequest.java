@@ -9,14 +9,14 @@ public class VoteRequest
     @Size(min = 2, max = 100, message = "question must be between 2 and 100 symbols")
     String pollName;
 
-    String OptionName;
+    String optionName;
 
     public VoteRequest() {
     }
 
     public VoteRequest(String pollName, String optionName) {
         this.pollName = pollName;
-        OptionName = optionName;
+        optionName = optionName;
     }
 
     public String getPollName() {
@@ -28,10 +28,10 @@ public class VoteRequest
     }
 
     public String getOptionName() {
-        return OptionName;
+        return optionName;
     }
 
     public void setOptionName(String optionName) {
-        OptionName = optionName;
+        this.optionName = optionName;
     }
 }
