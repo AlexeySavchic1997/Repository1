@@ -1,6 +1,7 @@
 package by.alexeysavchic.voter_pet_project.controllers;
 
 
+import by.alexeysavchic.voter_pet_project.dto.request.RoleRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 import by.alexeysavchic.voter_pet_project.security.Role;
 import by.alexeysavchic.voter_pet_project.service.RoleService;
@@ -20,14 +21,14 @@ public class RoleController
     }
 
     @PostMapping("/addrole/{id}")
-    public UserResponse addRole(@PathVariable ("id") Long id,@RequestParam Role role)
+    public UserResponse addRole(@PathVariable ("id") Long id, @RequestBody RoleRequest request)
     {
-        return roleService.addRole(id,role);
+        return roleService.addRole(id,request.getRole());
     }
 
     @DeleteMapping("/removerole/{id}")
-    public UserResponse removeRole(@PathVariable ("id") Long id,@RequestParam Role role)
+    public UserResponse removeRole(@PathVariable ("id") Long id,@RequestBody RoleRequest request)
     {
-        return roleService.removeRole(id,role);
+        return roleService.removeRole(id,request.getRole());
     }
 }

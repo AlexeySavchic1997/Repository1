@@ -29,10 +29,10 @@ public class User
     private String email;
 
 
-    @OneToMany(mappedBy ="user")
+    @OneToMany(mappedBy ="user", cascade = CascadeType.REMOVE)
     private List<Vote> votes;
 
-    @OneToMany(mappedBy = "createdBy")
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.REMOVE)
     private List<Poll> createdPolls;
 
     @ElementCollection(fetch = FetchType.EAGER)

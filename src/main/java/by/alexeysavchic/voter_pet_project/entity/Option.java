@@ -21,7 +21,7 @@ public class Option
     @JoinColumn(name = "poll_id")
     private Poll poll;
 
-    @OneToMany(mappedBy = "option")
+    @OneToMany(mappedBy = "option", cascade = CascadeType.REMOVE)
     private List<Vote> votes;
 
     public Option() {

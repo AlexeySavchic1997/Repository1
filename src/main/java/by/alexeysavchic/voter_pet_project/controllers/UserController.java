@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,5 +52,12 @@ public class UserController
     public UserResponse changePassword(@Valid @RequestBody ChangePasswordRequest request)
     {
         return userService.changePassword(request);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser (@PathVariable("id") Long id)
+    {
+        userService.deleteUser(id);
     }
 }
