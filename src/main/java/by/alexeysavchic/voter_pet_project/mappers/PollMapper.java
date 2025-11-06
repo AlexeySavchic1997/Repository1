@@ -1,13 +1,11 @@
 package by.alexeysavchic.voter_pet_project.mappers;
 
-
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.AllPollsResponse;
 import by.alexeysavchic.voter_pet_project.dto.response.PollResponse;
 import by.alexeysavchic.voter_pet_project.entity.Option;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

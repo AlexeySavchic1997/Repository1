@@ -1,6 +1,5 @@
 package by.alexeysavchic.voter_pet_project.service;
 
-
 import by.alexeysavchic.voter_pet_project.dto.request.LoginRequest;
 import by.alexeysavchic.voter_pet_project.dto.request.RegisterRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
@@ -15,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,14 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthServiceImpl implements AuthService
 {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final AuthenticationManager authenticationManager;
 
 
-    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper, AuthenticationManager authenticationManager) {
+    public AuthServiceImpl(UserRepository userRepository, UserMapper userMapper, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.authenticationManager = authenticationManager;
     }

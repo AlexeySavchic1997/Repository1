@@ -32,7 +32,6 @@ public class PollController
         return pollService.createPoll(request);
     }
 
-
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePoll (@PathVariable("id") Long id) {

@@ -3,7 +3,6 @@ package by.alexeysavchic.voter_pet_project.entity;
 
 import by.alexeysavchic.voter_pet_project.security.Role;
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;

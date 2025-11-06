@@ -4,7 +4,6 @@ import by.alexeysavchic.voter_pet_project.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.stream.Collectors;
 

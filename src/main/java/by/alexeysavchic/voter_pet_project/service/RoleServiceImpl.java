@@ -7,6 +7,7 @@ import by.alexeysavchic.voter_pet_project.mappers.UserMapper;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RoleServiceImpl implements RoleService
@@ -21,6 +22,7 @@ public class RoleServiceImpl implements RoleService
     }
 
     @Override
+    @Transactional
     public UserResponse addRole(Long id, Role role) {
         User user = userRepository.findUserById(id);
         if (user==null)
@@ -35,6 +37,7 @@ public class RoleServiceImpl implements RoleService
     }
 
     @Override
+    @Transactional
     public UserResponse removeRole(Long id, Role role) {
         User user = userRepository.findUserById(id);
         if (user==null)
@@ -49,6 +52,7 @@ public class RoleServiceImpl implements RoleService
     }
 
     @Override
+    @Transactional
     public boolean hasRole(Long id, Role role) {
         User user = userRepository.findUserById(id);
         if (user==null)

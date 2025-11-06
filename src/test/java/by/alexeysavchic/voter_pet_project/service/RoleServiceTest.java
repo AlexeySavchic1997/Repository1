@@ -1,6 +1,5 @@
 package by.alexeysavchic.voter_pet_project.service;
 
-
 import by.alexeysavchic.voter_pet_project.exceptions.UserNotFoundException;
 import by.alexeysavchic.voter_pet_project.mappers.UserMapper;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
