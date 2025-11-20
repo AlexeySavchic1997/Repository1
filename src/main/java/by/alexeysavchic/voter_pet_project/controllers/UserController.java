@@ -30,25 +30,25 @@ public class UserController
         return userService.findUser(username);
     }
 
-    @GetMapping("/all_users")
+    @GetMapping("/allUsers")
     public List<UserResponse> getAllUsers()
     {
         return userService.getAllUsers();
     }
 
-    @PutMapping("/change_name")
+    @PutMapping("/changeName")
     public UserResponse changeUsername(@RequestParam @NotBlank @Size(min = 2, max = 30) String newName)
     {
         return userService.changeUsername(newName);
     }
 
-    @PutMapping("/change_email")
+    @PutMapping("/changeEmail")
     public UserResponse changeEmail(@RequestParam @NotBlank @Email String newEmail)
     {
         return userService.changeEmail(newEmail);
     }
 
-    @PutMapping("/change_password")
+    @PutMapping("/changePassword")
     public UserResponse changePassword(@Valid @RequestBody ChangePasswordRequest request)
     {
         return userService.changePassword(request);
