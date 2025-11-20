@@ -20,13 +20,13 @@ public class PollController
         this.pollService = pollService;
     }
 
-    @GetMapping("all_polls")
+    @GetMapping("allPolls")
     public List<AllPollsResponse> getAllPolls()
     {
         return pollService.getAllPolls();
     }
 
-    @PostMapping("/create_poll")
+    @PostMapping("/createPoll")
     public PollResponse createPoll(@Valid @RequestBody PollRequest request)
     {
         return pollService.createPoll(request);
