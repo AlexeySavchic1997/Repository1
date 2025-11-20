@@ -1,4 +1,4 @@
-package by.alexeysavchic.voter_pet_project.exceptions;
+package by.alexeysavchic.voter_pet_project.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

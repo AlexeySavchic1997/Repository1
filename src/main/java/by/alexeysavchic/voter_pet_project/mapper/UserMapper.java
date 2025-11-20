@@ -1,4 +1,4 @@
-package by.alexeysavchic.voter_pet_project.mappers;
+package by.alexeysavchic.voter_pet_project.mapper;
 
 import by.alexeysavchic.voter_pet_project.dto.request.RegisterRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;

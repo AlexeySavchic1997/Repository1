@@ -1,7 +1,7 @@
 package by.alexeysavchic.voter_pet_project.service;
 
-import by.alexeysavchic.voter_pet_project.exceptions.UserNotFoundException;
-import by.alexeysavchic.voter_pet_project.mappers.UserMapper;
+import by.alexeysavchic.voter_pet_project.exception.UserNotFoundException;
+import by.alexeysavchic.voter_pet_project.mapper.UserMapper;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
 import org.junit.jupiter.api.DisplayName;

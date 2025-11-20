@@ -1,4 +1,4 @@
-package by.alexeysavchic.voter_pet_project.controllers;
+package by.alexeysavchic.voter_pet_project.controller;
 
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.AllPollsResponse;
