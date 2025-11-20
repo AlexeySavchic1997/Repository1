@@ -1,7 +1,7 @@
 package by.alexeysavchic.voter_pet_project.service;
 import by.alexeysavchic.voter_pet_project.dto.request.ChangePasswordRequest;
 import by.alexeysavchic.voter_pet_project.entity.User;
-import by.alexeysavchic.voter_pet_project.exceptions.*;
+import by.alexeysavchic.voter_pet_project.exception.*;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

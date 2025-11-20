@@ -7,7 +7,7 @@ import by.alexeysavchic.voter_pet_project.entity.Option;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.entity.Vote;
-import by.alexeysavchic.voter_pet_project.exceptions.*;
+import by.alexeysavchic.voter_pet_project.exception.*;
 import by.alexeysavchic.voter_pet_project.repository.PollRepository;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.repository.VoteRepository;

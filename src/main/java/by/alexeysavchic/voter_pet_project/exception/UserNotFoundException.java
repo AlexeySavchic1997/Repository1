@@ -1,4 +1,4 @@
-package by.alexeysavchic.voter_pet_project.exceptions;
+package by.alexeysavchic.voter_pet_project.exception;
 
 public class UserNotFoundException extends RuntimeException
 {
