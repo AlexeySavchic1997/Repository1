@@ -1,6 +1,6 @@
 package by.alexeysavchic.voter_pet_project.service;
 
-import by.alexeysavchic.voter_pet_project.dto.request.ChangePasswordRequest;
+import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 import java.util.List;
 
@@ -10,11 +10,7 @@ public interface UserService
 
     public List<UserResponse> getAllUsers();
 
-    public UserResponse changeUsername(String newName);
-
-    public UserResponse changePassword(ChangePasswordRequest request);
-
-    public UserResponse changeEmail(String newEmail);
+    public UserResponse changeCredentials(ChangeCredentialsRequest request);
 
     public void deleteUser(Long id);
 }

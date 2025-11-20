@@ -1,6 +1,6 @@
 package by.alexeysavchic.voter_pet_project.service;
 
-import by.alexeysavchic.voter_pet_project.dto.request.ChangePasswordRequest;
+import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.*;
@@ -60,55 +60,47 @@ public class UserServiceImpl implements UserService
 
     @Override
     @Transactional
-    public UserResponse changeUsername(String newName)
+    public UserResponse changeCredentials(ChangeCredentialsRequest request)
     {
-        if (userRepository.findUserByUsername(newName)!=null)
+        User user = userRepository.findUserById(securityContextService.getCurrentUser().getId());
+        if (user==null)
         {
-            throw new NameAllreadyExsistsException("Name already exists");
+            throw new UserNotFoundException("user not found");
         }
-        User user =securityContextService.getCurrentUser();
-        user.setUsername(newName);
-        userRepository.save(user);
-        UserResponse userResponse = userMapper.userToUserResponse(user);
-        return userResponse;
-    }
-
-    @Override
-    @Transactional
-    public UserResponse changePassword(ChangePasswordRequest request)
-    {
-        User user=securityContextService.getCurrentUser();
-
-        if (passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
+        if(request.getUsername()!=null)
         {
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        userRepository.save(user);
-
-        UserResponse userResponse=userMapper.userToUserResponse(user);
-        return userResponse;
+            if(userRepository.findUserByUsername(request.getUsername())==null)
+            {
+            user.setUsername(request.getUsername());
+            }
+            else
+            {
+                throw new NameAllreadyExsistsException("name already exist");
+            }
         }
-        else
+        if (request.getEmail()!=null)
         {
-            throw new WrongPasswordException("Wrong Password");
+            if(userRepository.findUserByEmail(request.getEmail())==null)
+            {
+                user.setEmail(request.getEmail());
+            }
+            else
+            {
+                throw new EmailAlreadyExsistException("email already exists");
+            }
         }
-
-    }
-
-    @Override
-    @Transactional
-    public UserResponse changeEmail(String newEmail)
-    {
-        if (userRepository.findUserByEmail(newEmail)!=null)
+        if (request.getNewPassword()!=null)
         {
-        throw new EmailAlreadyExsistException("Email already exists");
+            if (passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
+            {
+                user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            }
+            else
+            {
+                throw new WrongPasswordException("Wrong Password");
+            }
         }
-        User user=securityContextService.getCurrentUser();
-        user.setEmail(newEmail);
-        user= userRepository.save(user);
-
-        UserResponse userResponse = userMapper.userToUserResponse(user);
-
-        return userResponse;
+        return userMapper.userToUserResponse(user);
     }
 
     @Override
