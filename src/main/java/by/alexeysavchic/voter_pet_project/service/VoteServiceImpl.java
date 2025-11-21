@@ -1,8 +1,8 @@
 package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.dto.request.VoteRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.CountingResponce;
-import by.alexeysavchic.voter_pet_project.dto.response.VoteResponse;
+import by.alexeysavchic.voter_pet_project.dto.response.GetCountingResponse;
+import by.alexeysavchic.voter_pet_project.dto.response.GetVoteResponse;
 import by.alexeysavchic.voter_pet_project.entity.Option;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
 import by.alexeysavchic.voter_pet_project.entity.User;
@@ -36,7 +36,7 @@ public class VoteServiceImpl implements VoteService
 
     @Override
     @Transactional
-    public VoteResponse voting(VoteRequest voteRequest)
+    public GetVoteResponse voting(VoteRequest voteRequest)
     {
        Poll poll = pollRepository.findPollByQuestion(voteRequest.getPollName());
        if (poll==null)
@@ -66,13 +66,13 @@ public class VoteServiceImpl implements VoteService
        option.addVote(vote);
        voteRepository.save(vote);
 
-       return new VoteResponse(poll.getQuestion(), option.getText());
+       return new GetVoteResponse(poll.getQuestion(), option.getText());
     }
 
 
     @Override
     @Transactional
-    public List<CountingResponce> voteCounting(String question)
+    public List<GetCountingResponse> voteCounting(String question)
     {
         Poll poll=pollRepository.findPollByQuestion(question);
         if (poll==null)
@@ -80,13 +80,13 @@ public class VoteServiceImpl implements VoteService
             throw new PollNotExistException("Poll doesn't exist");
         }
         List<Option> options = poll.getOptions();
-        List<CountingResponce> response = new ArrayList<>();
+        List<GetCountingResponse> response = new ArrayList<>();
 
         for (Option option:options)
         {
             Integer count = (int) option.getVotes().stream().count();
-            CountingResponce countingResponce = new CountingResponce(option.getText(),count);
-            response.add(countingResponce);
+            GetCountingResponse getCountingResponse = new GetCountingResponse(option.getText(),count);
+            response.add(getCountingResponse);
         }
         return response;
     }

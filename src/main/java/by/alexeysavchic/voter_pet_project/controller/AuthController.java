@@ -1,8 +1,8 @@
 package by.alexeysavchic.voter_pet_project.controller;
 
 import by.alexeysavchic.voter_pet_project.dto.request.LoginRequest;
-import by.alexeysavchic.voter_pet_project.dto.request.RegisterRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
+import by.alexeysavchic.voter_pet_project.dto.request.UserRegisterRequest;
+import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +18,12 @@ public class AuthController
     }
 
     @PostMapping("/signup")
-    public UserResponse signup(@Valid @RequestBody RegisterRequest request) {
+    public GetUserResponse signup(@Valid @RequestBody UserRegisterRequest request) {
         return authService.signup(request);
     }
 
     @PostMapping("/login")
-    public UserResponse login(@Valid @RequestBody LoginRequest request) {
+    public GetUserResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
     }
 }

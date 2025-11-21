@@ -1,8 +1,8 @@
 package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.dto.request.LoginRequest;
-import by.alexeysavchic.voter_pet_project.dto.request.RegisterRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
+import by.alexeysavchic.voter_pet_project.dto.request.UserRegisterRequest;
+import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.EmailAlreadyExsistException;
 import by.alexeysavchic.voter_pet_project.exception.NameAllreadyExsistsException;
@@ -33,9 +33,9 @@ public class AuthServiceImpl implements AuthService
 
     @Transactional
     @Override
-    public UserResponse signup(RegisterRequest registerRequest)
+    public GetUserResponse signup(UserRegisterRequest userRegisterRequest)
     {
-        User user=userMapper.registerUserToUser(registerRequest);
+        User user=userMapper.registerUserToUser(userRegisterRequest);
 
         if (userRepository.findUserByUsername(user.getUsername())==null)
         {
@@ -52,13 +52,13 @@ public class AuthServiceImpl implements AuthService
         {
             throw new NameAllreadyExsistsException("Name already exists");
         }
-        UserResponse userResponse=userMapper.userToUserResponse(user);
-        return userResponse;
+        GetUserResponse getUserResponse =userMapper.userToUserResponse(user);
+        return getUserResponse;
     }
 
     @Transactional
     @Override
-    public UserResponse login(LoginRequest loginRequest)
+    public GetUserResponse login(LoginRequest loginRequest)
     {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

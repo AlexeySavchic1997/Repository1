@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RegisterRequest
+public class UserRegisterRequest
 {
     @NotBlank
     @Size(min = 2, max = 30, message = "username must be between 2 and 30 symbols")

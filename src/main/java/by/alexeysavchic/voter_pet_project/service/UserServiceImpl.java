@@ -2,13 +2,12 @@ package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
 import by.alexeysavchic.voter_pet_project.dto.request.FilterUserRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
+import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.*;
 import by.alexeysavchic.voter_pet_project.mapper.UserMapper;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService
 
     @Override
     @Transactional(readOnly = true)
-    public UserResponse findUser(String username)
+    public GetUserResponse findUser(String username)
     {
         User user= userRepository.findUserByUsername(username);
         if (user==null)
@@ -43,20 +42,20 @@ public class UserServiceImpl implements UserService
             throw new UserNotFoundException("User not found");
         }
 
-        UserResponse userResponse=userMapper.userToUserResponse(user);
+        GetUserResponse getUserResponse =userMapper.userToUserResponse(user);
 
-        return userResponse;
+        return getUserResponse;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserResponse> getUsers(FilterUserRequest filter, String condition)
+    public List<GetUserResponse> getUsers(FilterUserRequest filter, String condition)
     {
         if (filter!=null && condition==null)
         {
             throw new WrongFilterConditionException("wrong filter condition");
         }
-        List<UserResponse> response = new ArrayList<>();
+        List<GetUserResponse> response = new ArrayList<>();
         List<User> users= userRepository.findAll();
         switch (filter)
         {
@@ -78,7 +77,7 @@ public class UserServiceImpl implements UserService
 
     @Override
     @Transactional
-    public UserResponse changeCredentials(ChangeCredentialsRequest request)
+    public GetUserResponse changeCredentials(ChangeCredentialsRequest request)
     {
         User user = userRepository.findUserById(securityContextService.getCurrentUser().getId());
         if (user==null)

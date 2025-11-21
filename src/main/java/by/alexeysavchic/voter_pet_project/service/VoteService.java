@@ -1,14 +1,14 @@
 package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.dto.request.VoteRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.CountingResponce;
-import by.alexeysavchic.voter_pet_project.dto.response.VoteResponse;
+import by.alexeysavchic.voter_pet_project.dto.response.GetCountingResponse;
+import by.alexeysavchic.voter_pet_project.dto.response.GetVoteResponse;
 
 import java.util.List;
 
 public interface VoteService
 {
-    public VoteResponse voting(VoteRequest voteRequest);
+    public GetVoteResponse voting(VoteRequest voteRequest);
 
-    public List<CountingResponce> voteCounting(String question);
+    public List<GetCountingResponse> voteCounting(String question);
 }

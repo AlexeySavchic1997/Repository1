@@ -2,7 +2,7 @@ package by.alexeysavchic.voter_pet_project.controller;
 
 
 import by.alexeysavchic.voter_pet_project.dto.request.RoleRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
+import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.service.RoleService;
 import by.alexeysavchic.voter_pet_project.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +20,13 @@ public class RoleController
     }
 
     @PostMapping("/addrole/{id}")
-    public UserResponse addRole(@PathVariable ("id") Long id, @RequestBody RoleRequest request)
+    public GetUserResponse addRole(@PathVariable ("id") Long id, @RequestBody RoleRequest request)
     {
         return roleService.addRole(id,request.getRole());
     }
 
     @DeleteMapping("/removerole/{id}")
-    public UserResponse removeRole(@PathVariable ("id") Long id,@RequestBody RoleRequest request)
+    public GetUserResponse removeRole(@PathVariable ("id") Long id, @RequestBody RoleRequest request)
     {
         return roleService.removeRole(id,request.getRole());
     }

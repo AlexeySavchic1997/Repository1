@@ -2,7 +2,7 @@ package by.alexeysavchic.voter_pet_project.controller;
 
 import by.alexeysavchic.voter_pet_project.dto.request.FilterPollRequset;
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.PollResponse;
+import by.alexeysavchic.voter_pet_project.dto.response.GetPollResponse;
 import by.alexeysavchic.voter_pet_project.service.PollService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,15 +22,15 @@ public class PollController
     }
 
     @GetMapping("getPolls")
-    public List<PollResponse> getPolls(@RequestParam(value = "filter", required = false)FilterPollRequset filter,
-                                       @RequestParam(value="textCondition", required = false)String condition,
-                                       @RequestParam(value = "dateCondition", required = false) LocalDate timeCondition)
+    public List<GetPollResponse> getPolls(@RequestParam(value = "filter", required = false)FilterPollRequset filter,
+                                          @RequestParam(value="textCondition", required = false)String condition,
+                                          @RequestParam(value = "dateCondition", required = false) LocalDate timeCondition)
     {
        return pollService.getPolls(filter,condition,timeCondition);
     }
 
     @PostMapping("/createPoll")
-    public PollResponse createPoll(@Valid @RequestBody PollRequest request)
+    public GetPollResponse createPoll(@Valid @RequestBody PollRequest request)
     {
         return pollService.createPoll(request);
     }

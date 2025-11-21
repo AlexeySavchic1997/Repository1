@@ -2,7 +2,7 @@ package by.alexeysavchic.voter_pet_project.controller;
 
 import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
 import by.alexeysavchic.voter_pet_project.dto.request.FilterUserRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
+import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,20 +23,20 @@ public class UserController
     }
 
     @GetMapping("/{username}")
-    public UserResponse findUser(@PathVariable ("username") String username)
+    public GetUserResponse findUser(@PathVariable ("username") String username)
     {
         return userService.findUser(username);
     }
 
     @GetMapping({"/allUsers"})
-    public List<UserResponse> getAllUsers(@RequestParam(required = false, value="filter")FilterUserRequest filter,
-                                          @RequestParam(required = false, value="condition") String condition)
+    public List<GetUserResponse> getAllUsers(@RequestParam(required = false, value="filter")FilterUserRequest filter,
+                                             @RequestParam(required = false, value="condition") String condition)
     {
        return userService.getUsers(filter,condition);
     }
 
     @PutMapping("/changeCredentials")
-    public UserResponse changeCredentials(@Valid @RequestBody ChangeCredentialsRequest request)
+    public GetUserResponse changeCredentials(@Valid @RequestBody ChangeCredentialsRequest request)
     {
         return userService.changeCredentials(request);
     }

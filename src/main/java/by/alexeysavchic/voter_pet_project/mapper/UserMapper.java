@@ -1,7 +1,7 @@
 package by.alexeysavchic.voter_pet_project.mapper;
 
-import by.alexeysavchic.voter_pet_project.dto.request.RegisterRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
+import by.alexeysavchic.voter_pet_project.dto.request.UserRegisterRequest;
+import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.security.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,25 +16,25 @@ public class UserMapper
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerUserToUser(RegisterRequest registerRequest)
+    public User registerUserToUser(UserRegisterRequest userRegisterRequest)
     {
         User user = new User();
-        user.setUsername(registerRequest.getUsername());
-        user.setEmail(registerRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setUsername(userRegisterRequest.getUsername());
+        user.setEmail(userRegisterRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
         user.addRole(Role.ROLE_USER);
 
         return user;
     }
 
-    public UserResponse userToUserResponse(User user)
+    public GetUserResponse userToUserResponse(User user)
     {
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setUsername(user.getUsername());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setRoles(user.getRoles());
+        GetUserResponse getUserResponse = new GetUserResponse();
+        getUserResponse.setId(user.getId());
+        getUserResponse.setUsername(user.getUsername());
+        getUserResponse.setEmail(user.getEmail());
+        getUserResponse.setRoles(user.getRoles());
 
-        return userResponse;
+        return getUserResponse;
     }
 }

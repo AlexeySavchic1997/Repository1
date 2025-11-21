@@ -2,7 +2,7 @@ package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.dto.request.FilterPollRequset;
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.PollResponse;
+import by.alexeysavchic.voter_pet_project.dto.response.GetPollResponse;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.OperationDeniedException;
@@ -35,7 +35,7 @@ public class PollServiceImpl implements PollService
 
     @Override
     @Transactional(readOnly = true)
-    public List<PollResponse> getPolls(FilterPollRequset filter, String condition, LocalDate dateCondition)
+    public List<GetPollResponse> getPolls(FilterPollRequset filter, String condition, LocalDate dateCondition)
     {
         if (((filter==FilterPollRequset.CREATED_BY || filter==FilterPollRequset.QUESTION || filter==FilterPollRequset.DESCRIPTION)
         && condition==null) ||
@@ -43,7 +43,7 @@ public class PollServiceImpl implements PollService
         {
             throw new WrongFilterConditionException("wrong filter condition");
         }
-        List<PollResponse> response = new ArrayList<>();
+        List<GetPollResponse> response = new ArrayList<>();
         List<Poll> polls= pollRepository.findAll();
         switch (filter)
         {
@@ -74,7 +74,7 @@ public class PollServiceImpl implements PollService
 
     @Override
     @Transactional
-    public PollResponse createPoll(PollRequest pollRequest)
+    public GetPollResponse createPoll(PollRequest pollRequest)
     {
         User currentUser = securityContextService.getCurrentUser();
         if (currentUser == null) {

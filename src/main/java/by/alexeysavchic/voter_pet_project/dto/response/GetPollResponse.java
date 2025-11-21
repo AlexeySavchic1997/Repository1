@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PollResponse
+public class GetPollResponse
 {
     private long id;
 
@@ -21,7 +21,7 @@ public class PollResponse
 
     private LocalDateTime endingTime;
 
-    private UserResponse createdBy;
+    private GetUserResponse createdBy;
 
     private List<String> options;
 }

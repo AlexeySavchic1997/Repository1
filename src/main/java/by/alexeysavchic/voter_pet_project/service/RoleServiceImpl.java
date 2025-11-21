@@ -1,6 +1,6 @@
 package by.alexeysavchic.voter_pet_project.service;
 
-import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
+import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.UserNotFoundException;
 import by.alexeysavchic.voter_pet_project.mapper.UserMapper;
@@ -23,7 +23,7 @@ public class RoleServiceImpl implements RoleService
 
     @Override
     @Transactional
-    public UserResponse addRole(Long id, Role role) {
+    public GetUserResponse addRole(Long id, Role role) {
         User user = userRepository.findUserById(id);
         if (user==null)
         {
@@ -31,14 +31,14 @@ public class RoleServiceImpl implements RoleService
         }
         user.addRole(role);
         userRepository.save(user);
-        UserResponse response=userMapper.userToUserResponse(user);
+        GetUserResponse response=userMapper.userToUserResponse(user);
 
         return response;
     }
 
     @Override
     @Transactional
-    public UserResponse removeRole(Long id, Role role) {
+    public GetUserResponse removeRole(Long id, Role role) {
         User user = userRepository.findUserById(id);
         if (user==null)
         {
@@ -46,7 +46,7 @@ public class RoleServiceImpl implements RoleService
         }
         user.removeRole(role);
         userRepository.save(user);
-        UserResponse response=userMapper.userToUserResponse(user);
+        GetUserResponse response=userMapper.userToUserResponse(user);
 
         return response;
     }

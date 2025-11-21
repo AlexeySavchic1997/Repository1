@@ -1,7 +1,7 @@
 package by.alexeysavchic.voter_pet_project.mapper;
 
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.PollResponse;
+import by.alexeysavchic.voter_pet_project.dto.response.GetPollResponse;
 import by.alexeysavchic.voter_pet_project.entity.Option;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
 import org.springframework.stereotype.Component;
@@ -41,21 +41,21 @@ public class PollMapper
         return poll;
     }
 
-    public PollResponse pollToPollResponse(Poll poll)
+    public GetPollResponse pollToPollResponse(Poll poll)
     {
-        PollResponse pollResponse = new PollResponse();
-        pollResponse.setId(poll.getId());
-        pollResponse.setQuestion(poll.getQuestion());
-        pollResponse.setDescription(poll.getDescription());
-        pollResponse.setCreationTime(poll.getCreationTime());
-        pollResponse.setEndingTime(poll.getEndingTime());
-        pollResponse.setCreatedBy(userMapper.userToUserResponse(poll.getCreatedBy()));
+        GetPollResponse getPollResponse = new GetPollResponse();
+        getPollResponse.setId(poll.getId());
+        getPollResponse.setQuestion(poll.getQuestion());
+        getPollResponse.setDescription(poll.getDescription());
+        getPollResponse.setCreationTime(poll.getCreationTime());
+        getPollResponse.setEndingTime(poll.getEndingTime());
+        getPollResponse.setCreatedBy(userMapper.userToUserResponse(poll.getCreatedBy()));
         List<String> options = new ArrayList<>();
         for (Option option:poll.getOptions())
         {
             options.add(option.getText());
         }
-        pollResponse.setOptions(options);
-        return pollResponse;
+        getPollResponse.setOptions(options);
+        return getPollResponse;
     }
 }

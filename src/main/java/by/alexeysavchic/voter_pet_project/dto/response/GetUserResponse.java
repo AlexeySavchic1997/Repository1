@@ -10,7 +10,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserResponse
+public class GetUserResponse
 {
     private long id;
 

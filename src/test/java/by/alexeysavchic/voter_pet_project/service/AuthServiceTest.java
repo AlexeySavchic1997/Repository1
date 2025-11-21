@@ -1,8 +1,8 @@
 package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.dto.request.LoginRequest;
-import by.alexeysavchic.voter_pet_project.dto.request.RegisterRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
+import by.alexeysavchic.voter_pet_project.dto.request.UserRegisterRequest;
+import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.EmailAlreadyExsistException;
 import by.alexeysavchic.voter_pet_project.exception.NameAllreadyExsistsException;
@@ -42,7 +42,7 @@ public class AuthServiceTest
     @DisplayName("User with that name already exist")
     void signUpWhenUserNameAlreadyExist()
     {
-        RegisterRequest request= new RegisterRequest("name", "1234", "email@gmail.com");
+        UserRegisterRequest request= new UserRegisterRequest("name", "1234", "email@gmail.com");
         User user = new User();
         user.setUsername("name");
 
@@ -60,7 +60,7 @@ public class AuthServiceTest
     @DisplayName("User with that email already exist")
     void signUpWhenUserEmailAlreadyExist()
     {
-        RegisterRequest request= new RegisterRequest("name", "1234", "email@gmail.com");
+        UserRegisterRequest request= new UserRegisterRequest("name", "1234", "email@gmail.com");
         User user = new User();
         user.setEmail("email@gmail.com");
 
@@ -88,9 +88,9 @@ public class AuthServiceTest
 
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userMapper.userToUserResponse(user)).thenReturn(new UserResponse());
+        when(userMapper.userToUserResponse(user)).thenReturn(new GetUserResponse());
 
-        UserResponse result = authService.login(request);
+        GetUserResponse result = authService.login(request);
 
         assertNotNull(result);
         verify(authenticationManager).authenticate(any());
