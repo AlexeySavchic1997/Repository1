@@ -28,9 +28,9 @@ public class UserController
         return userService.findUser(username);
     }
 
-    @GetMapping({"/allUsers/{filter}/{condition}", "/allUsers"})
-    public List<UserResponse> getAllUsers(@PathVariable(required = false, name="filter")FilterUserRequest filter,
-                                          @PathVariable(required = false, name="condition") String condition)
+    @GetMapping({"/allUsers"})
+    public List<UserResponse> getAllUsers(@RequestParam(required = false, value="filter")FilterUserRequest filter,
+                                          @RequestParam(required = false, value="condition") String condition)
     {
        return userService.getUsers(filter,condition);
     }
