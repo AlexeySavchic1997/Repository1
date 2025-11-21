@@ -1,6 +1,7 @@
 package by.alexeysavchic.voter_pet_project.controller;
 
 import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
+import by.alexeysavchic.voter_pet_project.dto.request.FilterUserRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 import by.alexeysavchic.voter_pet_project.service.UserService;
 import jakarta.validation.Valid;
@@ -27,10 +28,11 @@ public class UserController
         return userService.findUser(username);
     }
 
-    @GetMapping("/allUsers")
-    public List<UserResponse> getAllUsers()
+    @GetMapping({"/allUsers/{filter}/{condition}", "/allUsers"})
+    public List<UserResponse> getAllUsers(@PathVariable(required = false, name="filter")FilterUserRequest filter,
+                                          @PathVariable(required = false, name="condition") String condition)
     {
-        return userService.getAllUsers();
+       return userService.getUsers(filter,condition);
     }
 
     @PutMapping("/changeCredentials")

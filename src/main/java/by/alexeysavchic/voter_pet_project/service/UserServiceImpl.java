@@ -1,12 +1,14 @@
 package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
+import by.alexeysavchic.voter_pet_project.dto.request.FilterUserRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.UserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.*;
 import by.alexeysavchic.voter_pet_project.mapper.UserMapper;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +24,9 @@ public class UserServiceImpl implements UserService
     private final PasswordEncoder passwordEncoder;
     private final SecurityContextService securityContextService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, SecurityContextService securityContextService) {
+
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, SecurityContextService securityContextService)
+    {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
@@ -33,7 +37,6 @@ public class UserServiceImpl implements UserService
     @Transactional(readOnly = true)
     public UserResponse findUser(String username)
     {
-
         User user= userRepository.findUserByUsername(username);
         if (user==null)
         {
@@ -47,10 +50,21 @@ public class UserServiceImpl implements UserService
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserResponse> getAllUsers()
+    public List<UserResponse> getUsers(FilterUserRequest filter, String condition)
     {
         List<UserResponse> response = new ArrayList<>();
         List<User> users= userRepository.findAll();
+        switch (filter)
+        {
+            case USERNAME:
+                users=users.stream().filter(user -> (user.getUsername().contains(condition))).toList();
+                break;
+            case EMAIL:
+                users=users.stream().filter(user -> (user.getEmail().contains(condition))).toList();
+                break;
+            default:
+                break;
+        }
         for(User user: users)
         {
             response.add(userMapper.userToUserResponse(user));
