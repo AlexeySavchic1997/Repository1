@@ -66,9 +66,7 @@ public class VoteServiceImpl implements VoteService
        option.addVote(vote);
        voteRepository.save(vote);
 
-       VoteResponse voteResponse=new VoteResponse(poll.getQuestion(), option.getText());
-
-       return voteResponse;
+       return new VoteResponse(poll.getQuestion(), option.getText());
     }
 
 

@@ -1,9 +1,15 @@
 package by.alexeysavchic.voter_pet_project.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "votes")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Vote
 {
     @Id
@@ -19,36 +25,8 @@ public class Vote
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Vote() {
-    }
-
     public Vote(Option option, User user) {
         this.option = option;
         this.user = user;
     }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Option getOption() {
-        return option;
-    }
-
-    public void setOption(Option option) {
-        this.option = option;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
 }

@@ -1,9 +1,15 @@
 package by.alexeysavchic.voter_pet_project.dto.response;
 
 import by.alexeysavchic.voter_pet_project.security.Role;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserResponse
 {
     private long id;
@@ -13,41 +19,6 @@ public class UserResponse
     private String email;
 
     private Set<Role> roles;
-
-    public UserResponse() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 
     public boolean hasRole(Role role) { return this.roles.contains(role); }
 }

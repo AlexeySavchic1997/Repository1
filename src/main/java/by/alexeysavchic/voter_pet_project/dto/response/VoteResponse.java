@@ -1,29 +1,15 @@
 package by.alexeysavchic.voter_pet_project.dto.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
 public class VoteResponse
 {
     String pollName;
 
     String OptionName;
-
-    public VoteResponse(String pollName, String optionName) {
-        this.pollName = pollName;
-        OptionName = optionName;
-    }
-
-    public String getPollName() {
-        return pollName;
-    }
-
-    public void setPollName(String pollName) {
-        this.pollName = pollName;
-    }
-
-    public String getOptionName() {
-        return OptionName;
-    }
-
-    public void setOptionName(String optionName) {
-        OptionName = optionName;
-    }
 }

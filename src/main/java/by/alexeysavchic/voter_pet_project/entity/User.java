@@ -3,6 +3,11 @@ package by.alexeysavchic.voter_pet_project.entity;
 
 import by.alexeysavchic.voter_pet_project.security.Role;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -10,21 +15,27 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User
 {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @EqualsAndHashCode.Include
     private long id;
 
     @Column(name = "username", nullable = false, unique = true)
+    @EqualsAndHashCode.Include
     private String username;
 
     @Column(name="password", nullable = false)
     private String password;
 
     @Column(name = "email", unique = true)
+    @EqualsAndHashCode.Include
     private String email;
 
 
@@ -40,9 +51,6 @@ public class User
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
-    public User() {
-    }
-
     public User(String username, String password, String email, List<Vote> votes, List<Poll> createdPolls) {
         this.username = username;
         this.password = password;
@@ -56,69 +64,6 @@ public class User
         votes.add(vote);
     }
 
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(List<Vote> votes) {
-        this.votes = votes;
-    }
-
-    public List<Poll> getCreatedPolls() {
-        return createdPolls;
-    }
-
-    public void setCreatedPolls(List<Poll> createdPolls) {
-        this.createdPolls = createdPolls;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User user)) return false;
-        return getId() == user.getId() && getUsername().equals(user.getUsername()) && getEmail().equals(user.getEmail());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getUsername(), getEmail());
-    }
-
-    public Set<Role> getRoles() { return roles; }
-    public void setRoles(Set<Role> roles) { this.roles = roles; }
     public void addRole(Role role) { this.roles.add(role); }
     public void removeRole(Role role) { this.roles.remove(role); }
     public boolean hasRole(Role role) { return this.roles.contains(role); }

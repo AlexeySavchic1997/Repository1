@@ -1,54 +1,26 @@
 package by.alexeysavchic.voter_pet_project.dto.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class ChangeCredentialsRequest
 {
+    @Size(min = 2, max = 30, message = "username must be between 2 and 30 symbols")
     String username;
 
+    @Email(message = "wrong email pattern")
     String email;
 
+    @Size(min = 6, max = 15, message = "password must be between 6 and 15 symbols")
     String oldPassword;
 
+    @Size(min = 6, max = 15, message = "password must be between 6 and 15 symbols")
     String newPassword;
-
-    public ChangeCredentialsRequest() {
-    }
-
-    public ChangeCredentialsRequest(String username, String email, String oldPassword, String newPassword) {
-        this.username = username;
-        this.email = email;
-        this.oldPassword = oldPassword;
-        this.newPassword = newPassword;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
 }

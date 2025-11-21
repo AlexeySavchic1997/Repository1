@@ -2,7 +2,6 @@ package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.dto.request.FilterPollRequset;
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.AllPollsResponse;
 import by.alexeysavchic.voter_pet_project.dto.response.PollResponse;
 
 import java.time.LocalDate;
@@ -14,6 +13,6 @@ public interface PollService
 
     public void deletePoll (Long id);
 
-    public List<AllPollsResponse> getPolls(FilterPollRequset filter, String condition, LocalDate dateCondition);
+    public List<PollResponse> getPolls(FilterPollRequset filter, String condition, LocalDate dateCondition);
 
 }
