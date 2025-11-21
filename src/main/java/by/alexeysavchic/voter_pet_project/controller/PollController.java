@@ -1,5 +1,6 @@
 package by.alexeysavchic.voter_pet_project.controller;
 
+import by.alexeysavchic.voter_pet_project.dto.request.FilterPollRequset;
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.AllPollsResponse;
 import by.alexeysavchic.voter_pet_project.dto.response.PollResponse;
@@ -8,6 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -20,10 +23,12 @@ public class PollController
         this.pollService = pollService;
     }
 
-    @GetMapping("allPolls")
-    public List<AllPollsResponse> getAllPolls()
+    @GetMapping("getPolls")
+    public List<AllPollsResponse> getPolls(@RequestParam(value = "filter", required = false)FilterPollRequset filter,
+                                              @RequestParam(value="textCondition", required = false)String condition,
+                                              @RequestParam(value = "dateCondition", required = false) LocalDate timeCondition)
     {
-        return pollService.getAllPolls();
+       return pollService.getPolls(filter,condition,timeCondition);
     }
 
     @PostMapping("/createPoll")

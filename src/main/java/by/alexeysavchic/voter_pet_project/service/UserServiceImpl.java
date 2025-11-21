@@ -52,6 +52,10 @@ public class UserServiceImpl implements UserService
     @Transactional(readOnly = true)
     public List<UserResponse> getUsers(FilterUserRequest filter, String condition)
     {
+        if (filter!=null && condition==null)
+        {
+            throw new WrongFilterConditionException("wrong filter condition");
+        }
         List<UserResponse> response = new ArrayList<>();
         List<User> users= userRepository.findAll();
         switch (filter)
