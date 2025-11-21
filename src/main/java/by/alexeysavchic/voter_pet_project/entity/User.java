@@ -3,6 +3,8 @@ package by.alexeysavchic.voter_pet_project.entity;
 
 import by.alexeysavchic.voter_pet_project.security.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,13 +30,16 @@ public class User
     private long id;
 
     @Column(name = "username", nullable = false, unique = true)
+    @Size(min = 2, max = 30, message = "username must be between 2 and 30 symbols")
     @EqualsAndHashCode.Include
     private String username;
 
     @Column(name="password", nullable = false)
+    @Size(min = 6, max = 15, message = "password must be between 6 and 15 symbols")
     private String password;
 
     @Column(name = "email", unique = true)
+    @Email(message = "wrong email pattern")
     @EqualsAndHashCode.Include
     private String email;
 
