@@ -1,4 +1,4 @@
-package by.alexeysavchic.voter_pet_project.service;
+package by.alexeysavchic.voter_pet_project.security;
 
 import by.alexeysavchic.voter_pet_project.entity.User;
 

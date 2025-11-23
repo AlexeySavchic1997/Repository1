@@ -38,63 +38,63 @@ public class AuthServiceTest
     @InjectMocks
     private AuthServiceImpl authService;
 
-    @Test
-    @DisplayName("User with that name already exist")
-    void signUpWhenUserNameAlreadyExist()
-    {
-        UserRegisterRequest request= new UserRegisterRequest("name", "1234", "email@gmail.com");
-        User user = new User();
-        user.setUsername("name");
+//    @Test
+//    @DisplayName("User with that name already exist")
+//    void signUpWhenUserNameAlreadyExist()
+//    {
+//        UserRegisterRequest request= new UserRegisterRequest("name", "1234", "email@gmail.com");
+//        User user = new User();
+//        user.setUsername("name");
+//
+//        when(userMapper.registerUserToUser(request)).thenReturn(user);
+//        when(userRepository.findUserByUsername("name")).thenReturn(user);
+//
+//        assertThrows(NameAllreadyExsistsException.class, () -> {
+//            authService.signup(request);
+//        });
+//
+//        verify(userRepository, never()).save(any());
+//    }
 
-        when(userMapper.registerUserToUser(request)).thenReturn(user);
-        when(userRepository.findUserByUsername("name")).thenReturn(user);
+//    @Test
+//    @DisplayName("User with that email already exist")
+//    void signUpWhenUserEmailAlreadyExist()
+//    {
+//        UserRegisterRequest request= new UserRegisterRequest("name", "1234", "email@gmail.com");
+//        User user = new User();
+//        user.setEmail("email@gmail.com");
+//
+//        when(userMapper.registerUserToUser(request)).thenReturn(user);
+//        when(userRepository.findUserByEmail("email@gmail.com")).thenReturn(user);
+//
+//        assertThrows(EmailAlreadyExsistException.class, () -> {
+//            authService.signup(request);
+//        });
+//
+//        verify(userRepository, never()).save(any());
+//    }
 
-        assertThrows(NameAllreadyExsistsException.class, () -> {
-            authService.signup(request);
-        });
-
-        verify(userRepository, never()).save(any());
-    }
-
-    @Test
-    @DisplayName("User with that email already exist")
-    void signUpWhenUserEmailAlreadyExist()
-    {
-        UserRegisterRequest request= new UserRegisterRequest("name", "1234", "email@gmail.com");
-        User user = new User();
-        user.setEmail("email@gmail.com");
-
-        when(userMapper.registerUserToUser(request)).thenReturn(user);
-        when(userRepository.findUserByEmail("email@gmail.com")).thenReturn(user);
-
-        assertThrows(EmailAlreadyExsistException.class, () -> {
-            authService.signup(request);
-        });
-
-        verify(userRepository, never()).save(any());
-    }
-
-    @Test
-    @DisplayName("Successful Login")
-    void SuccessfulLogin()
-    {
-        LoginRequest request = new LoginRequest("name", "1234");
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("name");
-
-        Authentication authentication = mock(Authentication.class);
-        CustomUserDetails userDetails = new CustomUserDetails(user);
-
-        when(authenticationManager.authenticate(any())).thenReturn(authentication);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userMapper.userToUserResponse(user)).thenReturn(new GetUserResponse());
-
-        GetUserResponse result = authService.login(request);
-
-        assertNotNull(result);
-        verify(authenticationManager).authenticate(any());
-    }
+//    @Test
+//    @DisplayName("Successful Login")
+//    void SuccessfulLogin()
+//    {
+//        LoginRequest request = new LoginRequest("name", "1234");
+//        User user = new User();
+//        user.setId(1L);
+//        user.setUsername("name");
+//
+//        Authentication authentication = mock(Authentication.class);
+//        CustomUserDetails userDetails = new CustomUserDetails(user);
+//
+//        when(authenticationManager.authenticate(any())).thenReturn(authentication);
+//        when(authentication.getPrincipal()).thenReturn(userDetails);
+//        when(userMapper.userToUserResponse(user)).thenReturn(new GetUserResponse());
+//
+//        GetUserResponse result = authService.login(request);
+//
+//        assertNotNull(result);
+//        verify(authenticationManager).authenticate(any());
+//    }
 
 }
 

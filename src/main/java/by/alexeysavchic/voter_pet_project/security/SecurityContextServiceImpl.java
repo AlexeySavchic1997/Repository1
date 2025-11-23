@@ -1,8 +1,7 @@
-package by.alexeysavchic.voter_pet_project.service;
+package by.alexeysavchic.voter_pet_project.security;
 
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
-import by.alexeysavchic.voter_pet_project.security.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

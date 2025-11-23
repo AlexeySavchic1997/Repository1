@@ -11,6 +11,8 @@ import by.alexeysavchic.voter_pet_project.exception.WrongFilterConditionExceptio
 import by.alexeysavchic.voter_pet_project.mapper.PollMapper;
 import by.alexeysavchic.voter_pet_project.repository.PollRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
+import by.alexeysavchic.voter_pet_project.security.SecurityContextService;
+import by.alexeysavchic.voter_pet_project.serviceInterfaces.PollService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,7 +79,8 @@ public class PollServiceImpl implements PollService
     public GetPollResponse createPoll(PollRequest pollRequest)
     {
         User currentUser = securityContextService.getCurrentUser();
-        if (currentUser == null) {
+        if (currentUser == null)
+        {
             throw new OperationDeniedException("User not authenticated");
         }
         Poll poll=pollMapper.pollRequestToPoll(pollRequest);
@@ -91,11 +94,8 @@ public class PollServiceImpl implements PollService
     @Transactional
     public void deletePoll (Long id)
     {
-        Poll poll = pollRepository.findPollById(id);
-        if (poll==null)
-        {
-            throw new PollNotExistException("Poll don't exist");
-        }
+        Poll poll = pollRepository.findPollById(id).orElseThrow(()->new PollNotExistException("Poll don't exist"));
+
         if ((securityContextService.getCurrentUser().equals(poll.getCreatedBy()))||
                 (securityContextService.getCurrentUser().hasRole(Role.ROLE_ADMIN))||
         securityContextService.getCurrentUser().hasRole(Role.ROLE_MODERATOR))

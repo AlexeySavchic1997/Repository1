@@ -1,18 +1,18 @@
 package by.alexeysavchic.voter_pet_project.entity;
 
-
+import by.alexeysavchic.voter_pet_project.customValidations.UniqueEmail;
+import by.alexeysavchic.voter_pet_project.customValidations.UniqueUsername;
 import by.alexeysavchic.voter_pet_project.security.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -31,15 +31,20 @@ public class User
 
     @Column(name = "username", nullable = false, unique = true)
     @Size(min = 2, max = 30, message = "username must be between 2 and 30 symbols")
+    @NotBlank
+    @UniqueUsername
     @EqualsAndHashCode.Include
     private String username;
 
     @Column(name="password", nullable = false)
     @Size(min = 6, max = 15, message = "password must be between 6 and 15 symbols")
+    @NotBlank
     private String password;
 
     @Column(name = "email", unique = true)
     @Email(message = "wrong email pattern")
+    @NotBlank
+    @UniqueEmail
     @EqualsAndHashCode.Include
     private String email;
 

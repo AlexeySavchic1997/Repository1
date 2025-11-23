@@ -1,5 +1,7 @@
 package by.alexeysavchic.voter_pet_project.dto.request;
 
+import by.alexeysavchic.voter_pet_project.customValidations.UniqueEmail;
+import by.alexeysavchic.voter_pet_project.customValidations.UniqueUsername;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -14,6 +16,7 @@ public class UserRegisterRequest
 {
     @NotBlank
     @Size(min = 2, max = 30, message = "username must be between 2 and 30 symbols")
+    @UniqueUsername
     private String username;
 
     @NotBlank
@@ -22,5 +25,6 @@ public class UserRegisterRequest
 
     @NotBlank
     @Email(message = "wrong email pattern")
+    @UniqueEmail
     private String email;
 }

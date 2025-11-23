@@ -3,7 +3,7 @@ package by.alexeysavchic.voter_pet_project.controller;
 import by.alexeysavchic.voter_pet_project.dto.request.FilterPollRequset;
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetPollResponse;
-import by.alexeysavchic.voter_pet_project.service.PollService;
+import by.alexeysavchic.voter_pet_project.serviceInterfaces.PollService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

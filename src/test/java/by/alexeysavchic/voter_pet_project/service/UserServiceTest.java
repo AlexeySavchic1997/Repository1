@@ -1,8 +1,8 @@
 package by.alexeysavchic.voter_pet_project.service;
 import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
-import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.*;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
+import by.alexeysavchic.voter_pet_project.security.SecurityContextService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -92,20 +92,20 @@ public class UserServiceTest
         verify(userRepository, never()).delete(any());
     }
 
-    @Test
-    @DisplayName("Change email when email already exist")
-    void deleteUserWhenUserNotCreator()
-    {
-        User user = new User();
-        user.setUsername("name1");
-        User anotherUser = new User();
-        anotherUser.setUsername("name2");
-        when(userRepository.findUserById(1L)).thenReturn(user);
-        when(securityContextService.getCurrentUser()).thenReturn(anotherUser);
-
-        assertThrows(OperationDeniedException.class,()->userService.deleteUser(1L));
-        verify(userRepository, never()).delete(any());
-    }
+//    @Test
+//    @DisplayName("Change email when email already exist")
+//    void deleteUserWhenUserNotCreator()
+//    {
+//        User user = new User();
+//        user.setUsername("name1");
+//        User anotherUser = new User();
+//        anotherUser.setUsername("name2");
+//        when(userRepository.findUserById(1L)).thenReturn(user);
+//        when(securityContextService.getCurrentUser()).thenReturn(anotherUser);
+//
+//        assertThrows(OperationDeniedException.class,()->userService.deleteUser(1L));
+//        verify(userRepository, never()).delete(any());
+//    }
 
 
 

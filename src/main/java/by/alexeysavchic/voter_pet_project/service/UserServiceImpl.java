@@ -8,6 +8,9 @@ import by.alexeysavchic.voter_pet_project.exception.*;
 import by.alexeysavchic.voter_pet_project.mapper.UserMapper;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
+import by.alexeysavchic.voter_pet_project.security.SecurityContextService;
+import by.alexeysavchic.voter_pet_project.serviceInterfaces.UserService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,13 +39,10 @@ public class UserServiceImpl implements UserService
     @Transactional(readOnly = true)
     public GetUserResponse findUser(String username)
     {
-        User user= userRepository.findUserByUsername(username);
-        if (user==null)
-        {
-            throw new UserNotFoundException("User not found");
-        }
+        User user = userRepository.findUserByUsername(username).orElseThrow(()->
+                new UsernameNotFoundException("User not found with username: " + username));
 
-        GetUserResponse getUserResponse =userMapper.userToUserResponse(user);
+        GetUserResponse getUserResponse=userMapper.userToUserResponse(user);
 
         return getUserResponse;
     }
@@ -79,44 +79,21 @@ public class UserServiceImpl implements UserService
     @Transactional
     public GetUserResponse changeCredentials(ChangeCredentialsRequest request)
     {
-        User user = userRepository.findUserById(securityContextService.getCurrentUser().getId());
-        if (user==null)
+        User user = userRepository.findUserById(securityContextService.getCurrentUser().getId()).orElseThrow(()->
+                new UserNotFoundException("User not found"));;
+
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+
+        if (passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
         {
-            throw new UserNotFoundException("user not found");
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         }
-        if(request.getUsername()!=null)
+        else
         {
-            if(userRepository.findUserByUsername(request.getUsername())==null)
-            {
-            user.setUsername(request.getUsername());
-            }
-            else
-            {
-                throw new NameAllreadyExsistsException("name already exist");
-            }
+            throw new WrongPasswordException("Wrong Password");
         }
-        if (request.getEmail()!=null)
-        {
-            if(userRepository.findUserByEmail(request.getEmail())==null)
-            {
-                user.setEmail(request.getEmail());
-            }
-            else
-            {
-                throw new EmailAlreadyExsistException("email already exists");
-            }
-        }
-        if (request.getNewPassword()!=null)
-        {
-            if (passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
-            {
-                user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-            }
-            else
-            {
-                throw new WrongPasswordException("Wrong Password");
-            }
-        }
+
         return userMapper.userToUserResponse(user);
     }
 
@@ -124,11 +101,9 @@ public class UserServiceImpl implements UserService
     @Transactional
     public void deleteUser(Long id)
     {
-        User user = userRepository.findUserById(id);
-        if (user==null)
-        {
-            throw new UserNotFoundException("user not found");
-        }
+        User user = userRepository.findUserById(id).orElseThrow(()->
+                new UserNotFoundException("User not found"));
+
         if ((securityContextService.getCurrentUser().hasRole(Role.ROLE_ADMIN))||
         securityContextService.getCurrentUser().equals(user))
         {

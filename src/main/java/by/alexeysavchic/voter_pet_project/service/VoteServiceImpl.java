@@ -11,6 +11,8 @@ import by.alexeysavchic.voter_pet_project.exception.*;
 import by.alexeysavchic.voter_pet_project.repository.PollRepository;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.repository.VoteRepository;
+import by.alexeysavchic.voter_pet_project.security.SecurityContextServiceImpl;
+import by.alexeysavchic.voter_pet_project.serviceInterfaces.VoteService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -38,11 +40,9 @@ public class VoteServiceImpl implements VoteService
     @Transactional
     public GetVoteResponse voting(VoteRequest voteRequest)
     {
-       Poll poll = pollRepository.findPollByQuestion(voteRequest.getPollName());
-       if (poll==null)
-       {
-            throw new PollNotExistException("Poll doesn't exist");
-       }
+       Poll poll = pollRepository.findPollByQuestion(voteRequest.getPollName()).
+               orElseThrow(()->new PollNotExistException("Poll doesn't exist"));
+
        if (!poll.isActive())
        {
            throw new PollAlreadyEndedException("Poll already end");
@@ -74,11 +74,9 @@ public class VoteServiceImpl implements VoteService
     @Transactional
     public List<GetCountingResponse> voteCounting(String question)
     {
-        Poll poll=pollRepository.findPollByQuestion(question);
-        if (poll==null)
-        {
-            throw new PollNotExistException("Poll doesn't exist");
-        }
+        Poll poll=pollRepository.findPollByQuestion(question).
+                orElseThrow(()->new PollNotExistException("Poll doesn't exist"));
+
         List<Option> options = poll.getOptions();
         List<GetCountingResponse> response = new ArrayList<>();
 

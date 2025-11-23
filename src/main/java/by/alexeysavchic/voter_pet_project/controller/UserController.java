@@ -3,7 +3,7 @@ package by.alexeysavchic.voter_pet_project.controller;
 import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
 import by.alexeysavchic.voter_pet_project.dto.request.FilterUserRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
-import by.alexeysavchic.voter_pet_project.service.UserService;
+import by.alexeysavchic.voter_pet_project.serviceInterfaces.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;

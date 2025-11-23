@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails
 {
-    User user;
+    private User user;
 
     public CustomUserDetails(User user) {
         this.user = user;

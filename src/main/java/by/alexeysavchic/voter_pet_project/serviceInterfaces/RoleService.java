@@ -1,4 +1,4 @@
-package by.alexeysavchic.voter_pet_project.service;
+package by.alexeysavchic.voter_pet_project.serviceInterfaces;
 
 import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.security.Role;

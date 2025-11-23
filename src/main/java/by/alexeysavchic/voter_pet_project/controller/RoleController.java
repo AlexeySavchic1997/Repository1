@@ -3,8 +3,8 @@ package by.alexeysavchic.voter_pet_project.controller;
 
 import by.alexeysavchic.voter_pet_project.dto.request.RoleRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
-import by.alexeysavchic.voter_pet_project.service.RoleService;
-import by.alexeysavchic.voter_pet_project.service.UserService;
+import by.alexeysavchic.voter_pet_project.serviceInterfaces.RoleService;
+import by.alexeysavchic.voter_pet_project.serviceInterfaces.UserService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
