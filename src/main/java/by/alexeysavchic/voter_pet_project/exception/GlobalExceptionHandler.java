@@ -33,8 +33,6 @@ public class GlobalExceptionHandler
             OperationDeniedException.class,
             UserAlreadyVotedException.class,
             PollAlreadyEndedException.class,
-            EmailAlreadyExsistException.class,
-            NameAllreadyExsistsException.class,
             WrongPasswordException.class,
             WrongFilterConditionException.class
     })

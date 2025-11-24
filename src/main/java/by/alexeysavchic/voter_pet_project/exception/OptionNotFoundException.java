@@ -2,7 +2,10 @@ package by.alexeysavchic.voter_pet_project.exception;
 
 public class OptionNotFoundException extends RuntimeException
 {
-    public OptionNotFoundException(String message) {
+    private final static String message="option not found";
+
+    public OptionNotFoundException()
+    {
         super(message);
     }
 }

@@ -1,27 +1,16 @@
 package by.alexeysavchic.voter_pet_project.service;
 
-import by.alexeysavchic.voter_pet_project.dto.request.LoginRequest;
-import by.alexeysavchic.voter_pet_project.dto.request.UserRegisterRequest;
-import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
-import by.alexeysavchic.voter_pet_project.entity.User;
-import by.alexeysavchic.voter_pet_project.exception.EmailAlreadyExsistException;
-import by.alexeysavchic.voter_pet_project.exception.NameAllreadyExsistsException;
 import by.alexeysavchic.voter_pet_project.mapper.UserMapper;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
-import by.alexeysavchic.voter_pet_project.security.CustomUserDetails;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest

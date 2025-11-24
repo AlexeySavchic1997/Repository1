@@ -2,7 +2,10 @@ package by.alexeysavchic.voter_pet_project.exception;
 
 public class WrongPasswordException extends RuntimeException
 {
-    public WrongPasswordException(String message) {
+    private final static String message="wrong password";
+
+    public WrongPasswordException()
+    {
         super(message);
     }
 }

@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService
     {
         if (filter!=null && condition==null)
         {
-            throw new WrongFilterConditionException("wrong filter condition");
+            throw new WrongFilterConditionException();
         }
         List<GetUserResponse> response = new ArrayList<>();
         List<User> users= userRepository.findAll();
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService
     public GetUserResponse changeCredentials(ChangeCredentialsRequest request)
     {
         User user = userRepository.findUserById(securityContextService.getCurrentUser().getId()).orElseThrow(()->
-                new UserNotFoundException("User not found"));;
+                new UserNotFoundException());;
 
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService
         }
         else
         {
-            throw new WrongPasswordException("Wrong Password");
+            throw new WrongPasswordException();
         }
 
         return userMapper.userToUserResponse(user);
@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService
     public void deleteUser(Long id)
     {
         User user = userRepository.findUserById(id).orElseThrow(()->
-                new UserNotFoundException("User not found"));
+                new UserNotFoundException());
 
         if ((securityContextService.getCurrentUser().hasRole(Role.ROLE_ADMIN))||
         securityContextService.getCurrentUser().equals(user))
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService
         }
         else
         {
-            throw new OperationDeniedException("operation denied");
+            throw new OperationDeniedException();
         }
     }
 

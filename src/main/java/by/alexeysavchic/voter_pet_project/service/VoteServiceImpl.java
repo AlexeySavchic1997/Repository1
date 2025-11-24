@@ -41,23 +41,23 @@ public class VoteServiceImpl implements VoteService
     public GetVoteResponse voting(VoteRequest voteRequest)
     {
        Poll poll = pollRepository.findPollByQuestion(voteRequest.getPollName()).
-               orElseThrow(()->new PollNotExistException("Poll doesn't exist"));
+               orElseThrow(()->new PollNotExistException());
 
        if (!poll.isActive())
        {
-           throw new PollAlreadyEndedException("Poll already end");
+           throw new PollAlreadyEndedException();
        }
 
        Option option = poll.getOptions().stream().filter(opt -> opt.getText().equals(voteRequest.getOptionName())).
-               findFirst().orElseThrow(()->new OptionNotFoundException("Option not found"));
+               findFirst().orElseThrow(()->new OptionNotFoundException());
 
 
        User user = userRepository.findById(securityContextService.getCurrentUser().getId())
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException());
 
        if (voteRepository.existsByUserAndOption_Poll(user, poll))
        {
-            throw new UserAlreadyVotedException("User already voted");
+            throw new UserAlreadyVotedException();
        }
        Vote vote = new Vote();
        vote.setOption(option);
@@ -75,7 +75,7 @@ public class VoteServiceImpl implements VoteService
     public List<GetCountingResponse> voteCounting(String question)
     {
         Poll poll=pollRepository.findPollByQuestion(question).
-                orElseThrow(()->new PollNotExistException("Poll doesn't exist"));
+                orElseThrow(()->new PollNotExistException());
 
         List<Option> options = poll.getOptions();
         List<GetCountingResponse> response = new ArrayList<>();

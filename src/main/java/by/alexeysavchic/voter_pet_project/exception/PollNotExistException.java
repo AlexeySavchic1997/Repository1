@@ -2,7 +2,9 @@ package by.alexeysavchic.voter_pet_project.exception;
 
 public class PollNotExistException extends RuntimeException
 {
-    public PollNotExistException(String message) {
+    private final static String message="poll doesn't exist";
+
+    public PollNotExistException() {
         super(message);
     }
 }

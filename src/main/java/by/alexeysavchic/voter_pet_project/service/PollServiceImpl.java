@@ -43,7 +43,7 @@ public class PollServiceImpl implements PollService
         && condition==null) ||
                 ((filter==FilterPollRequset.CREATING_TIME || filter==FilterPollRequset.ENDING_TIME) && dateCondition==null))
         {
-            throw new WrongFilterConditionException("wrong filter condition");
+            throw new WrongFilterConditionException();
         }
         List<GetPollResponse> response = new ArrayList<>();
         List<Poll> polls= pollRepository.findAll();
@@ -81,7 +81,7 @@ public class PollServiceImpl implements PollService
         User currentUser = securityContextService.getCurrentUser();
         if (currentUser == null)
         {
-            throw new OperationDeniedException("User not authenticated");
+            throw new OperationDeniedException();
         }
         Poll poll=pollMapper.pollRequestToPoll(pollRequest);
         poll.setCreatedBy(securityContextService.getCurrentUser());
@@ -94,7 +94,7 @@ public class PollServiceImpl implements PollService
     @Transactional
     public void deletePoll (Long id)
     {
-        Poll poll = pollRepository.findPollById(id).orElseThrow(()->new PollNotExistException("Poll don't exist"));
+        Poll poll = pollRepository.findPollById(id).orElseThrow(()->new PollNotExistException());
 
         if ((securityContextService.getCurrentUser().equals(poll.getCreatedBy()))||
                 (securityContextService.getCurrentUser().hasRole(Role.ROLE_ADMIN))||
@@ -104,7 +104,7 @@ public class PollServiceImpl implements PollService
         }
         else
         {
-            throw new OperationDeniedException("Operation Denied");
+            throw new OperationDeniedException();
         }
     }
 

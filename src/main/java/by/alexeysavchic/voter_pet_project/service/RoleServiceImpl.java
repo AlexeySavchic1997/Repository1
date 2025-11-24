@@ -27,7 +27,7 @@ public class RoleServiceImpl implements RoleService
     public GetUserResponse addRole(Long id, Role role)
     {
         User user = userRepository.findUserById(id).orElseThrow(()->
-                new UserNotFoundException("User not found"));
+                new UserNotFoundException());
 
         user.addRole(role);
         userRepository.save(user);
@@ -41,7 +41,7 @@ public class RoleServiceImpl implements RoleService
     public GetUserResponse removeRole(Long id, Role role)
     {
         User user = userRepository.findUserById(id).orElseThrow(()->
-                new UserNotFoundException("User not found"));
+                new UserNotFoundException());
 
         user.removeRole(role);
         userRepository.save(user);
@@ -55,7 +55,7 @@ public class RoleServiceImpl implements RoleService
     public boolean hasRole(Long id, Role role)
     {
         User user = userRepository.findUserById(id).orElseThrow(()->
-                new UserNotFoundException("User not found"));
+                new UserNotFoundException());
 
         return user.hasRole(role);
     }
