@@ -31,9 +31,8 @@ public class RoleServiceImpl implements RoleService
 
         user.addRole(role);
         userRepository.save(user);
-        GetUserResponse response=userMapper.userToUserResponse(user);
 
-        return response;
+        return userMapper.userToUserResponse(user);
     }
 
     @Override

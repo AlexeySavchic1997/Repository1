@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -40,55 +41,55 @@ public class VoteServiceTest
         assertThrows(PollNotExistException.class, () -> voteService.voting(voteRequest));
     }
 
-//    @Test
-//    @DisplayName("Voting when voting already ended")
-//    public void votingAlreadyEnded()
-//    {
-//        VoteRequest voteRequest = new VoteRequest();
-//        voteRequest.setPollName("name");
-//        Poll poll = new Poll();
-//        poll.setCreationTime(LocalDateTime.now());
-//        poll.setEndingTime(LocalDateTime.now().minusDays(1));
-//
-//        when(pollRepository.findPollByQuestion("name")).thenReturn(poll);
-//
-//        assertThrows(PollAlreadyEndedException.class, () -> voteService.voting(voteRequest));
-//    }
+    @Test
+    @DisplayName("Voting when voting already ended")
+    public void votingAlreadyEnded()
+    {
+        VoteRequest voteRequest = new VoteRequest();
+        voteRequest.setPollName("name");
+        Poll poll = new Poll();
+        poll.setCreationTime(LocalDateTime.now());
+        poll.setEndingTime(LocalDateTime.now().minusDays(1));
 
-//    @Test
-//    @DisplayName("Voting when option not found")
-//    public void votingWhenOptionNotFound()
-//    {
-//        VoteRequest voteRequest = new VoteRequest();
-//        voteRequest.setPollName("name");
-//        Poll poll = new Poll();
-//        List<Option> options = new ArrayList<>();
-//        poll.setOptions(options);
-//        poll.setCreationTime(LocalDateTime.now());
-//        poll.setEndingTime(LocalDateTime.now().plusDays(1));
-//
-//        when(pollRepository.findPollByQuestion("name")).thenReturn(poll);
-//
-//        assertThrows(OptionNotFoundException.class, () -> voteService.voting(voteRequest));
-//    }
+        when(pollRepository.findPollByQuestion("name")).thenReturn(Optional.of(poll));
 
-//    @Test
-//    @DisplayName("Voting when option not found")
-//    public void votingWhenUserAlreadyVoted()
-//    {
-//        VoteRequest voteRequest = new VoteRequest("pollName","WrongOption");
-//        Poll poll = new Poll();
-//        poll.setQuestion("pollName");
-//        List<Option> options = new ArrayList<>();
-//        poll.setCreationTime(LocalDateTime.now());
-//        poll.setEndingTime(LocalDateTime.now().plusDays(1));
-//        poll.setOptions(options);
-//
-//        when(pollRepository.findPollByQuestion("pollName")).thenReturn(poll);
-//
-//
-//        assertThrows(OptionNotFoundException.class, () -> voteService.voting(voteRequest));
-//    }
+        assertThrows(PollAlreadyEndedException.class, () -> voteService.voting(voteRequest));
+    }
+
+    @Test
+    @DisplayName("Voting when option not found")
+    public void votingWhenOptionNotFound()
+    {
+        VoteRequest voteRequest = new VoteRequest();
+        voteRequest.setPollName("name");
+        Poll poll = new Poll();
+        List<Option> options = new ArrayList<>();
+        poll.setOptions(options);
+        poll.setCreationTime(LocalDateTime.now());
+        poll.setEndingTime(LocalDateTime.now().plusDays(1));
+
+        when(pollRepository.findPollByQuestion("name")).thenReturn(Optional.of(poll));
+
+        assertThrows(OptionNotFoundException.class, () -> voteService.voting(voteRequest));
+    }
+
+    @Test
+    @DisplayName("Voting when option not found")
+    public void votingWhenUserAlreadyVoted()
+    {
+        VoteRequest voteRequest = new VoteRequest("pollName","WrongOption");
+        Poll poll = new Poll();
+        poll.setQuestion("pollName");
+        List<Option> options = new ArrayList<>();
+        poll.setCreationTime(LocalDateTime.now());
+        poll.setEndingTime(LocalDateTime.now().plusDays(1));
+        poll.setOptions(options);
+
+        when(pollRepository.findPollByQuestion("pollName")).thenReturn(Optional.of(poll));
+
+
+        assertThrows(OptionNotFoundException.class, () -> voteService.voting(voteRequest));
+    }
 
     @Test
     @DisplayName("Voting when option not found")

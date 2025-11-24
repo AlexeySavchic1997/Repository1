@@ -2,7 +2,10 @@ package by.alexeysavchic.voter_pet_project.service;
 
 
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
+import by.alexeysavchic.voter_pet_project.entity.Poll;
+import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.OperationDeniedException;
+import by.alexeysavchic.voter_pet_project.exception.PollNotExistException;
 import by.alexeysavchic.voter_pet_project.mapper.PollMapper;
 import by.alexeysavchic.voter_pet_project.repository.PollRepository;
 import by.alexeysavchic.voter_pet_project.security.SecurityContextService;
@@ -12,6 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -44,35 +49,35 @@ public class PollServiceTest
         });
     }
 
-//    @Test
-//    @DisplayName("Delete poll which doesn't exist")
-//    public void deleteNotExistingPoll()
-//    {
-//        Long id = 1L;
-//        when(pollRepository.findPollById(id)).thenReturn(null);
-//
-//        assertThrows(PollNotExistException.class, ()->pollService.deletePoll(id));
-//        verify(pollRepository, never()).delete(any());
-//    }
+    @Test
+    @DisplayName("Delete poll which doesn't exist")
+    public void deleteNotExistingPoll()
+    {
+        Long id = 1L;
+        when(pollRepository.findPollById(id)).thenReturn(null);
 
-//    @Test
-//    @DisplayName("Delete poll with no access")
-//    public void DeleteUserWithoutAccess()
-//    {
-//        User pollCreator = new User();
-//        pollCreator.setUsername("creator");
-//        User user = new User();
-//        user.setUsername("user");
-//
-//        Poll poll = new Poll();
-//        poll.setId(1L);
-//        poll.setCreatedBy(pollCreator);
-//
-//        when(pollRepository.findPollById(1L)).thenReturn(poll);
-//        when(securityContextService.getCurrentUser()).thenReturn(user);
-//
-//        assertThrows(OperationDeniedException.class, ()->pollService.deletePoll(1L));
-//
-//        verify(pollRepository, never()).delete(any());
-//    }
+        assertThrows(PollNotExistException.class, ()->pollService.deletePoll(id));
+        verify(pollRepository, never()).delete(any());
+    }
+
+    @Test
+    @DisplayName("Delete poll with no access")
+    public void DeleteUserWithoutAccess()
+    {
+        User pollCreator = new User();
+        pollCreator.setUsername("creator");
+        User user = new User();
+        user.setUsername("user");
+
+        Poll poll = new Poll();
+        poll.setId(1L);
+        poll.setCreatedBy(pollCreator);
+
+        when(pollRepository.findPollById(1L)).thenReturn(Optional.of(poll));
+        when(securityContextService.getCurrentUser()).thenReturn(user);
+
+        assertThrows(OperationDeniedException.class, ()->pollService.deletePoll(1L));
+
+        verify(pollRepository, never()).delete(any());
+    }
 }

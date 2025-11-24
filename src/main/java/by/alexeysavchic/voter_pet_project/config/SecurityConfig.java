@@ -20,6 +20,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/role/**").hasRole("ADMIN")
+//                        .requestMatchers("/api/poll/delete/**").hasAnyRole("ADMIN", "MODERATOR")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form.disable()

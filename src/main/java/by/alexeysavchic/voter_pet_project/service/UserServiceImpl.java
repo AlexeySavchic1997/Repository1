@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService
     public GetUserResponse changeCredentials(ChangeCredentialsRequest request)
     {
         User user = userRepository.findUserById(securityContextService.getCurrentUser().getId()).orElseThrow(()->
-                new UserNotFoundException());;
+                new UserNotFoundException());
 
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
