@@ -36,7 +36,6 @@ public class PollServiceImpl implements PollService
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<GetPollResponse> getPolls(FilterPollRequset filter, String condition, LocalDate dateCondition)
     {
         if (((filter==FilterPollRequset.CREATED_BY || filter==FilterPollRequset.QUESTION || filter==FilterPollRequset.DESCRIPTION)
@@ -75,7 +74,6 @@ public class PollServiceImpl implements PollService
     }
 
     @Override
-    @Transactional
     public GetPollResponse createPoll(PollRequest pollRequest)
     {
         User currentUser = securityContextService.getCurrentUser();
@@ -91,7 +89,6 @@ public class PollServiceImpl implements PollService
     }
 
     @Override
-    @Transactional
     public void deletePoll (Long id)
     {
         Poll poll = pollRepository.findPollById(id).orElseThrow(()->new PollNotExistException());

@@ -8,6 +8,7 @@ import by.alexeysavchic.voter_pet_project.entity.Poll;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.entity.Vote;
 import by.alexeysavchic.voter_pet_project.exception.*;
+import by.alexeysavchic.voter_pet_project.repository.OptionRepository;
 import by.alexeysavchic.voter_pet_project.repository.PollRepository;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.repository.VoteRepository;
@@ -27,17 +28,19 @@ public class VoteServiceImpl implements VoteService
 
     private final UserRepository userRepository;
 
+    private final OptionRepository optionRepository;
+
     private final SecurityContextServiceImpl securityContextService;
 
-    public VoteServiceImpl(VoteRepository voteRepository, PollRepository pollRepository, UserRepository userRepository, SecurityContextServiceImpl securityContextService) {
+    public VoteServiceImpl(VoteRepository voteRepository, PollRepository pollRepository, UserRepository userRepository, OptionRepository optionRepository, SecurityContextServiceImpl securityContextService) {
         this.voteRepository = voteRepository;
         this.pollRepository = pollRepository;
         this.userRepository = userRepository;
+        this.optionRepository = optionRepository;
         this.securityContextService = securityContextService;
     }
 
     @Override
-    @Transactional
     public GetVoteResponse voting(VoteRequest voteRequest)
     {
        Poll poll = pollRepository.findPollByQuestion(voteRequest.getPollName()).
@@ -71,13 +74,12 @@ public class VoteServiceImpl implements VoteService
 
 
     @Override
-    @Transactional
     public List<GetCountingResponse> voteCounting(String question)
     {
         Poll poll=pollRepository.findPollByQuestion(question).
                 orElseThrow(()->new PollNotExistException());
 
-        List<Option> options = poll.getOptions();
+        List<Option> options = optionRepository.findOptionByPoll(poll);
         List<GetCountingResponse> response = new ArrayList<>();
 
         for (Option option:options)

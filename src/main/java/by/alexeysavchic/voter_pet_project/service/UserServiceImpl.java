@@ -36,7 +36,6 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    @Transactional(readOnly = true)
     public GetUserResponse findUser(String username)
     {
         User user = userRepository.findUserByUsername(username).orElseThrow(()->
@@ -48,7 +47,6 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<GetUserResponse> getUsers(FilterUserRequest filter, String condition)
     {
         if (filter!=null && condition==null)
@@ -76,7 +74,6 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    @Transactional
     public GetUserResponse changeCredentials(ChangeCredentialsRequest request)
     {
         User user = userRepository.findUserById(securityContextService.getCurrentUser().getId()).orElseThrow(()->
@@ -94,11 +91,12 @@ public class UserServiceImpl implements UserService
             throw new WrongPasswordException();
         }
 
+        userRepository.save(user);
+
         return userMapper.userToUserResponse(user);
     }
 
     @Override
-    @Transactional
     public void deleteUser(Long id)
     {
         User user = userRepository.findUserById(id).orElseThrow(()->

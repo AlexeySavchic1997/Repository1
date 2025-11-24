@@ -30,7 +30,6 @@ public class AuthServiceImpl implements AuthService
         this.authenticationManager = authenticationManager;
     }
 
-    @Transactional
     @Override
     public GetUserResponse signup(UserRegisterRequest userRegisterRequest)
     {
@@ -42,7 +41,7 @@ public class AuthServiceImpl implements AuthService
         return getUserResponse;
     }
 
-    @Transactional
+
     @Override
     public GetUserResponse login(LoginRequest loginRequest)
     {

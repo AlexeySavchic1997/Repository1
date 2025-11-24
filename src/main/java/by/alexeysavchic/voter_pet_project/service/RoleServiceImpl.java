@@ -23,7 +23,6 @@ public class RoleServiceImpl implements RoleService
     }
 
     @Override
-    @Transactional
     public GetUserResponse addRole(Long id, Role role)
     {
         User user = userRepository.findUserById(id).orElseThrow(()->
@@ -36,7 +35,6 @@ public class RoleServiceImpl implements RoleService
     }
 
     @Override
-    @Transactional
     public GetUserResponse removeRole(Long id, Role role)
     {
         User user = userRepository.findUserById(id).orElseThrow(()->
@@ -50,7 +48,6 @@ public class RoleServiceImpl implements RoleService
     }
 
     @Override
-    @Transactional
     public boolean hasRole(Long id, Role role)
     {
         User user = userRepository.findUserById(id).orElseThrow(()->
