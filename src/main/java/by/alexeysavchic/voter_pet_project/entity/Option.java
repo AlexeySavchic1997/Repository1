@@ -5,9 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "options")
@@ -39,10 +37,5 @@ public class Option
         this.text = text;
         this.poll = poll;
         this.votes = votes;
-    }
-
-    public void addVote(Vote vote)
-    {
-        votes.add(vote);
     }
 }

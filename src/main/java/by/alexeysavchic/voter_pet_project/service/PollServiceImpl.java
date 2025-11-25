@@ -1,6 +1,7 @@
 package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.dto.request.FilterPollRequset;
+import by.alexeysavchic.voter_pet_project.dto.request.GetPollsRequest;
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetPollResponse;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
@@ -14,7 +15,6 @@ import by.alexeysavchic.voter_pet_project.security.Role;
 import by.alexeysavchic.voter_pet_project.security.SecurityContextService;
 import by.alexeysavchic.voter_pet_project.serviceInterfaces.PollService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -36,8 +36,11 @@ public class PollServiceImpl implements PollService
     }
 
     @Override
-    public List<GetPollResponse> getPolls(FilterPollRequset filter, String condition, LocalDate dateCondition)
+    public List<GetPollResponse> getPolls(GetPollsRequest request)
     {
+        FilterPollRequset filter=request.getFilterPollRequset();
+        String condition=request.getCondition();
+        LocalDate dateCondition=request.getDateCondition();
         if (((filter==FilterPollRequset.CREATED_BY || filter==FilterPollRequset.QUESTION || filter==FilterPollRequset.DESCRIPTION)
         && condition==null) ||
                 ((filter==FilterPollRequset.CREATING_TIME || filter==FilterPollRequset.ENDING_TIME) && dateCondition==null))
@@ -68,7 +71,7 @@ public class PollServiceImpl implements PollService
         }
         for (Poll poll:polls)
         {
-            response.add(pollMapper.pollToPollResponse(poll));
+            response.add(pollMapper.pollToGetPollResponse(poll));
         }
         return response;
     }
@@ -85,7 +88,7 @@ public class PollServiceImpl implements PollService
         poll.setCreatedBy(securityContextService.getCurrentUser());
         poll=pollRepository.save(poll);
 
-        return pollMapper.pollToPollResponse(poll);
+        return pollMapper.pollToGetPollResponse(poll);
     }
 
     @Override

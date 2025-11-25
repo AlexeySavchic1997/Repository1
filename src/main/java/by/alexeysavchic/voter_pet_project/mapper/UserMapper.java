@@ -3,38 +3,21 @@ package by.alexeysavchic.voter_pet_project.mapper;
 import by.alexeysavchic.voter_pet_project.dto.request.UserRegisterRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
-import by.alexeysavchic.voter_pet_project.security.Role;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
-@Component
-public class UserMapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public abstract class UserMapper
 {
-    PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public UserMapper(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Mapping(target = "role", constant = "ROLE_USER")
+    @Mapping(target = "password", expression = "java(passwordEncoder.encode(userRegisterRequest.getPassword())")
+    public abstract User userRegisterRequestToUser(UserRegisterRequest userRegisterRequest);
 
-    public User registerUserToUser(UserRegisterRequest userRegisterRequest)
-    {
-        User user = new User();
-        user.setUsername(userRegisterRequest.getUsername());
-        user.setEmail(userRegisterRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
-        user.addRole(Role.ROLE_USER);
-
-        return user;
-    }
-
-    public GetUserResponse userToUserResponse(User user)
-    {
-        GetUserResponse getUserResponse = new GetUserResponse();
-        getUserResponse.setId(user.getId());
-        getUserResponse.setUsername(user.getUsername());
-        getUserResponse.setEmail(user.getEmail());
-        getUserResponse.setRoles(user.getRoles());
-
-        return getUserResponse;
-    }
+    public abstract GetUserResponse userToGetUserResponse(User user);
 }

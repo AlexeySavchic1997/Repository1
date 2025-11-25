@@ -8,7 +8,6 @@ import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
 import by.alexeysavchic.voter_pet_project.serviceInterfaces.RoleService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RoleServiceImpl implements RoleService
@@ -31,7 +30,7 @@ public class RoleServiceImpl implements RoleService
         user.addRole(role);
         userRepository.save(user);
 
-        return userMapper.userToUserResponse(user);
+        return userMapper.userToGetUserResponse(user);
     }
 
     @Override
@@ -42,7 +41,7 @@ public class RoleServiceImpl implements RoleService
 
         user.removeRole(role);
         userRepository.save(user);
-        GetUserResponse response=userMapper.userToUserResponse(user);
+        GetUserResponse response=userMapper.userToGetUserResponse(user);
 
         return response;
     }

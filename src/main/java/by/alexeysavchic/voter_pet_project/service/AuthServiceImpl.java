@@ -14,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthServiceImpl implements AuthService
@@ -33,11 +32,11 @@ public class AuthServiceImpl implements AuthService
     @Override
     public GetUserResponse signup(UserRegisterRequest userRegisterRequest)
     {
-        User user=userMapper.registerUserToUser(userRegisterRequest);
+        User user=userMapper.userRegisterRequestToUser(userRegisterRequest);
 
         user= userRepository.save(user);
 
-        GetUserResponse getUserResponse =userMapper.userToUserResponse(user);
+        GetUserResponse getUserResponse =userMapper.userToGetUserResponse(user);
         return getUserResponse;
     }
 
@@ -58,7 +57,7 @@ public class AuthServiceImpl implements AuthService
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userDetails.getUser();
-        return userMapper.userToUserResponse(user);
+        return userMapper.userToGetUserResponse(user);
 
     }
 }

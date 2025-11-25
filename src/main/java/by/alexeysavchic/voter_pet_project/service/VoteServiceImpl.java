@@ -7,7 +7,11 @@ import by.alexeysavchic.voter_pet_project.entity.Option;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.entity.Vote;
-import by.alexeysavchic.voter_pet_project.exception.*;
+import by.alexeysavchic.voter_pet_project.exception.OptionNotFoundException;
+import by.alexeysavchic.voter_pet_project.exception.PollAlreadyEndedException;
+import by.alexeysavchic.voter_pet_project.exception.PollNotExistException;
+import by.alexeysavchic.voter_pet_project.exception.UserAlreadyVotedException;
+import by.alexeysavchic.voter_pet_project.exception.UserNotFoundException;
 import by.alexeysavchic.voter_pet_project.repository.OptionRepository;
 import by.alexeysavchic.voter_pet_project.repository.PollRepository;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
@@ -15,7 +19,6 @@ import by.alexeysavchic.voter_pet_project.repository.VoteRepository;
 import by.alexeysavchic.voter_pet_project.security.SecurityContextServiceImpl;
 import by.alexeysavchic.voter_pet_project.serviceInterfaces.VoteService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +69,7 @@ public class VoteServiceImpl implements VoteService
        vote.setOption(option);
        vote.setUser(user);
        user.addVote(vote);
-       option.addVote(vote);
+       option.getVotes().add(vote);
        voteRepository.save(vote);
 
        return new GetVoteResponse(poll.getQuestion(), option.getText());

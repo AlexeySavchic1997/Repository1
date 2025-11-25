@@ -2,6 +2,7 @@ package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
 import by.alexeysavchic.voter_pet_project.dto.request.FilterUserRequest;
+import by.alexeysavchic.voter_pet_project.dto.request.GetUsersRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.*;
@@ -13,7 +14,7 @@ import by.alexeysavchic.voter_pet_project.serviceInterfaces.UserService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,19 +37,21 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public GetUserResponse findUser(String username)
+    public GetUserResponse findUserById(Long id)
     {
-        User user = userRepository.findUserByUsername(username).orElseThrow(()->
-                new UsernameNotFoundException("User not found with username: " + username));
+        User user = userRepository.findUserById(id).orElseThrow(()->
+                new UsernameNotFoundException("User not found with username: " + id));
 
-        GetUserResponse getUserResponse=userMapper.userToUserResponse(user);
+        GetUserResponse getUserResponse=userMapper.userToGetUserResponse(user);
 
         return getUserResponse;
     }
 
     @Override
-    public List<GetUserResponse> getUsers(FilterUserRequest filter, String condition)
+    public List<GetUserResponse> getUsers(GetUsersRequest request)
     {
+        FilterUserRequest filter=request.getFilterUserRequest();
+        String condition = request.getCondition();
         if (filter!=null && condition==null)
         {
             throw new WrongFilterConditionException();
@@ -68,7 +71,7 @@ public class UserServiceImpl implements UserService
         }
         for(User user: users)
         {
-            response.add(userMapper.userToUserResponse(user));
+            response.add(userMapper.userToGetUserResponse(user));
         }
         return response;
     }
@@ -93,7 +96,7 @@ public class UserServiceImpl implements UserService
 
         userRepository.save(user);
 
-        return userMapper.userToUserResponse(user);
+        return userMapper.userToGetUserResponse(user);
     }
 
     @Override

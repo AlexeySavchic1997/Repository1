@@ -4,58 +4,51 @@ import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetPollResponse;
 import by.alexeysavchic.voter_pet_project.entity.Option;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
-import org.springframework.stereotype.Component;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@Component
-public class PollMapper
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
+import org.springframework.beans.factory.annotation.Autowired;
+
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class})
+public abstract class PollMapper
 {
-    private final UserMapper userMapper;
+    @Autowired
+    private UserMapper userMapper;
 
-    public PollMapper(UserMapper userMapper)
+
+    @Mapping(target = "creationTime", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "endingTime", expression = "java(LocalDateTime.now().plusDays(pollRequest.getDuration()))")
+    public abstract Poll pollRequestToPoll(PollRequest pollRequest);
+
+    protected Option stringToOption(String text)
     {
-
-        this.userMapper = userMapper;
-    }
-
-    public Poll pollRequestToPoll(PollRequest pollRequest)
-    {
-        Poll poll = new Poll();
-        poll.setQuestion(pollRequest.getQuestion());
-        poll.setDescription(pollRequest.getDescription());
-        List<Option> options = new ArrayList<>();
-        for(String text:pollRequest.getOptions())
+        if (text==null)
         {
-            Option option = new Option();
-            option.setText(text);
-            option.setPoll(poll);
-            options.add(option);
+            return null;
         }
-        poll.setOptions(options);
-        LocalDateTime creationTime=LocalDateTime.now();
-        poll.setCreationTime(creationTime);
-        poll.setEndingTime(creationTime.plusDays(pollRequest.getDuration()));
-
-        return poll;
+        Option option = new Option();
+        option.setText(text);
+        return option;
     }
 
-    public GetPollResponse pollToPollResponse(Poll poll)
+    @AfterMapping
+    protected void addPollToOptions(@MappingTarget Poll poll)
     {
-        GetPollResponse getPollResponse = new GetPollResponse();
-        getPollResponse.setId(poll.getId());
-        getPollResponse.setQuestion(poll.getQuestion());
-        getPollResponse.setDescription(poll.getDescription());
-        getPollResponse.setCreationTime(poll.getCreationTime());
-        getPollResponse.setEndingTime(poll.getEndingTime());
-        getPollResponse.setCreatedBy(userMapper.userToUserResponse(poll.getCreatedBy()));
-        List<String> options = new ArrayList<>();
-        for (Option option:poll.getOptions())
+        if(poll.getOptions()!=null)
         {
-            options.add(option.getText());
+            poll.getOptions().forEach(option -> option.setPoll(poll));
         }
-        getPollResponse.setOptions(options);
-        return getPollResponse;
     }
+
+    public abstract GetPollResponse pollToGetPollResponse(Poll poll);
+
+    protected String optionToString(Option option)
+    {
+        return option.getText();
+    }
+
+
 }

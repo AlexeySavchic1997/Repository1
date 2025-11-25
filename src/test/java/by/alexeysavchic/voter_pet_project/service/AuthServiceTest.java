@@ -43,7 +43,7 @@ public class AuthServiceTest
 
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userMapper.userToUserResponse(user)).thenReturn(new GetUserResponse());
+        when(userMapper.userToGetUserResponse(user)).thenReturn(new GetUserResponse());
 
         GetUserResponse result = authService.login(request);
 

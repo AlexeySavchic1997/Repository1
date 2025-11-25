@@ -2,7 +2,6 @@ package by.alexeysavchic.voter_pet_project.security;
 
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
-import by.alexeysavchic.voter_pet_project.security.CustomUserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

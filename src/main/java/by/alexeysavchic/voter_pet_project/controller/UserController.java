@@ -1,13 +1,22 @@
 package by.alexeysavchic.voter_pet_project.controller;
 
 import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
-import by.alexeysavchic.voter_pet_project.dto.request.FilterUserRequest;
+import by.alexeysavchic.voter_pet_project.dto.request.GetUsersRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.serviceInterfaces.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 
 import java.util.List;
 
@@ -22,26 +31,25 @@ public class UserController
         this.userService = userService;
     }
 
-    @GetMapping("/{username}")
-    public GetUserResponse findUser(@PathVariable ("username") String username)
+    @GetMapping("/{id}")
+    public GetUserResponse findUserById(@PathVariable("id") Long id)
     {
-        return userService.findUser(username);
+        return userService.findUserById(id);
     }
 
-    @GetMapping({"/allUsers"})
-    public List<GetUserResponse> getAllUsers(@RequestParam(required = false, value="filter")FilterUserRequest filter,
-                                             @RequestParam(required = false, value="condition") String condition)
+    @PostMapping
+    public List<GetUserResponse> getAllUsers(@RequestBody GetUsersRequest request)
     {
-       return userService.getUsers(filter,condition);
+       return userService.getUsers(request);
     }
 
-    @PutMapping("/changeCredentials")
+    @PutMapping
     public GetUserResponse changeCredentials(@Valid @RequestBody ChangeCredentialsRequest request)
     {
         return userService.changeCredentials(request);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser (@PathVariable("id") Long id)
     {
