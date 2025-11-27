@@ -4,20 +4,20 @@ import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetPollResponse;
 import by.alexeysavchic.voter_pet_project.entity.Option;
 import by.alexeysavchic.voter_pet_project.entity.Poll;
-
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class})
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class},
+        unmappedTargetPolicy = ReportingPolicy.WARN)
 public abstract class PollMapper
 {
     @Autowired
     private UserMapper userMapper;
-
 
     @Mapping(target = "creationTime", expression = "java(LocalDateTime.now())")
     @Mapping(target = "endingTime", expression = "java(LocalDateTime.now().plusDays(pollRequest.getDuration()))")
@@ -29,8 +29,7 @@ public abstract class PollMapper
         {
             return null;
         }
-        Option option = new Option();
-        option.setText(text);
+        Option option = Option.builder().text(text).build();
         return option;
     }
 

@@ -11,6 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RoleRequest
 {
+
+    Long id;
+
     @NotNull(message = "Role is required")
     private Role role;
 }

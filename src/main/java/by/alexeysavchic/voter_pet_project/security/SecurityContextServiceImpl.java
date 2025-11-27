@@ -5,7 +5,6 @@ import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SecurityContextServiceImpl implements SecurityContextService {
@@ -16,7 +15,6 @@ public class SecurityContextServiceImpl implements SecurityContextService {
     }
 
     @Override
-    @Transactional
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated())

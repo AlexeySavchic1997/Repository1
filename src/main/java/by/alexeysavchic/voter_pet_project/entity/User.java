@@ -3,7 +3,20 @@ package by.alexeysavchic.voter_pet_project.entity;
 import by.alexeysavchic.voter_pet_project.customValidations.UniqueEmail;
 import by.alexeysavchic.voter_pet_project.customValidations.UniqueUsername;
 import by.alexeysavchic.voter_pet_project.security.Role;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -48,7 +61,6 @@ public class User
     @EqualsAndHashCode.Include
     private String email;
 
-
     @OneToMany(mappedBy ="user", cascade = CascadeType.REMOVE)
     private List<Vote> votes;
 
@@ -60,14 +72,6 @@ public class User
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
-
-    public User(String username, String password, String email, List<Vote> votes, List<Poll> createdPolls) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.votes = votes;
-        this.createdPolls = createdPolls;
-    }
 
     public void addVote(Vote vote)
     {

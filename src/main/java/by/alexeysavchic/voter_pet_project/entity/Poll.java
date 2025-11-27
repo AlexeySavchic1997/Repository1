@@ -43,27 +43,6 @@ public class Poll
     @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL)
     private List<Option> options;
 
-    public Poll(String question, String description, LocalDateTime creationTime, LocalDateTime endingTime, User createdBy, List<Option> options) {
-        this.question = question;
-        this.description = description;
-        this.creationTime = creationTime;
-        this.endingTime = endingTime;
-        this.createdBy = createdBy;
-        this.options = options;
-    }
-
-    public Option getOption(String text)
-    {
-        for (Option option:options)
-        {
-            if (option.getText().equals(text))
-            {
-                return option;
-            }
-        }
-        return null;
-    }
-
     public boolean isActive()
     {
         if (LocalDateTime.now().isBefore(endingTime))

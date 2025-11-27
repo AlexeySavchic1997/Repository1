@@ -1,10 +1,14 @@
 package by.alexeysavchic.voter_pet_project.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Tolerate;
+
 import java.util.List;
 
 @Entity
@@ -12,6 +16,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Option
 {
@@ -32,10 +38,4 @@ public class Option
 
     @OneToMany(mappedBy = "option", cascade = CascadeType.REMOVE)
     private List<Vote> votes;
-
-    public Option(String text, Poll poll, List<Vote> votes) {
-        this.text = text;
-        this.poll = poll;
-        this.votes = votes;
-    }
 }

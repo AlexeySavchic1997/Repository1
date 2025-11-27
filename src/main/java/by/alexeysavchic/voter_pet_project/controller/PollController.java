@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/poll")
+@RequestMapping("/poll")
 public class PollController
 {
     private final PollService pollService;

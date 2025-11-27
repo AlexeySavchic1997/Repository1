@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/role")
+@RequestMapping("/role")
 public class RoleController
 {
     private final RoleService roleService;
@@ -23,15 +23,15 @@ public class RoleController
         this.roleService = roleService;
     }
 
-    @PostMapping("/{id}")
-    public GetUserResponse addRole(@PathVariable("id") Long id, @RequestBody RoleRequest request)
+    @PostMapping
+    public GetUserResponse addRole(@RequestBody RoleRequest request)
     {
-        return roleService.addRole(id,request.getRole());
+        return roleService.addRole(request);
     }
 
     @DeleteMapping("/{id}")
-    public GetUserResponse removeRole(@PathVariable ("id") Long id, @RequestBody RoleRequest request)
+    public GetUserResponse removeRole(@RequestBody RoleRequest request)
     {
-        return roleService.removeRole(id,request.getRole());
+        return roleService.removeRole(request);
     }
 }

@@ -1,11 +1,11 @@
 package by.alexeysavchic.voter_pet_project.service;
 
+import by.alexeysavchic.voter_pet_project.dto.request.RoleRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.UserNotFoundException;
 import by.alexeysavchic.voter_pet_project.mapper.UserMapper;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
-import by.alexeysavchic.voter_pet_project.security.Role;
 import by.alexeysavchic.voter_pet_project.serviceInterfaces.RoleService;
 import org.springframework.stereotype.Service;
 
@@ -22,36 +22,28 @@ public class RoleServiceImpl implements RoleService
     }
 
     @Override
-    public GetUserResponse addRole(Long id, Role role)
+    public GetUserResponse addRole(RoleRequest request)
     {
-        User user = userRepository.findUserById(id).orElseThrow(()->
+        User user = userRepository.findUserById(request.getId()).orElseThrow(()->
                 new UserNotFoundException());
 
-        user.addRole(role);
+        user.addRole(request.getRole());
         userRepository.save(user);
 
         return userMapper.userToGetUserResponse(user);
     }
 
     @Override
-    public GetUserResponse removeRole(Long id, Role role)
+    public GetUserResponse removeRole(RoleRequest request)
     {
-        User user = userRepository.findUserById(id).orElseThrow(()->
+        User user = userRepository.findUserById(request.getId()).orElseThrow(()->
                 new UserNotFoundException());
 
-        user.removeRole(role);
+        user.removeRole(request.getRole());
         userRepository.save(user);
         GetUserResponse response=userMapper.userToGetUserResponse(user);
 
         return response;
     }
 
-    @Override
-    public boolean hasRole(Long id, Role role)
-    {
-        User user = userRepository.findUserById(id).orElseThrow(()->
-                new UserNotFoundException());
-
-        return user.hasRole(role);
-    }
 }
