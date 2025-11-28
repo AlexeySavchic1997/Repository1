@@ -10,6 +10,8 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public abstract class UserMapper
 {
@@ -21,4 +23,6 @@ public abstract class UserMapper
     public abstract User userRegisterRequestToUser(UserRegisterRequest userRegisterRequest);
 
     public abstract GetUserResponse userToGetUserResponse(User user);
+
+    public abstract List<GetUserResponse> ListUsersToListGetUsersResponse(List<User> users);
 }

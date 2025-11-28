@@ -28,7 +28,7 @@ public class PollController
     }
 
     @PostMapping("/getPolls")
-    public List<GetPollResponse> getPolls(@Valid @RequestBody GetPollsRequest request)
+    public List<GetPollResponse> getPolls(@RequestBody GetPollsRequest request)
     {
        return pollService.getPolls(request);
     }

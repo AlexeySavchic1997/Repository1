@@ -30,10 +30,10 @@ public class Poll
     @Size(max = 300, message = "description must be less than 300 symbols")
     private String description;
 
-    @Column(name = "creationTime")
+    @Column(name = "creation_time")
     private LocalDateTime creationTime;
 
-    @Column(name = "endingTime")
+    @Column(name = "ending_time")
     private LocalDateTime endingTime;
 
     @ManyToOne

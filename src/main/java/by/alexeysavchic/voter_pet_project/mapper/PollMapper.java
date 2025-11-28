@@ -12,6 +12,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class},
         unmappedTargetPolicy = ReportingPolicy.WARN)
 public abstract class PollMapper
@@ -48,6 +50,8 @@ public abstract class PollMapper
     {
         return option.getText();
     }
+
+    public abstract List<GetPollResponse> ListPollToListGetPollResponse(List<Poll> polls);
 
 
 }

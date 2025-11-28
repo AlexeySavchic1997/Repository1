@@ -1,6 +1,5 @@
 package by.alexeysavchic.voter_pet_project.service;
 
-import by.alexeysavchic.voter_pet_project.dto.request.FilterPollRequset;
 import by.alexeysavchic.voter_pet_project.dto.request.GetPollsRequest;
 import by.alexeysavchic.voter_pet_project.dto.request.PollRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetPollResponse;
@@ -8,16 +7,15 @@ import by.alexeysavchic.voter_pet_project.entity.Poll;
 import by.alexeysavchic.voter_pet_project.entity.User;
 import by.alexeysavchic.voter_pet_project.exception.OperationDeniedException;
 import by.alexeysavchic.voter_pet_project.exception.PollNotExistException;
-import by.alexeysavchic.voter_pet_project.exception.WrongFilterConditionException;
 import by.alexeysavchic.voter_pet_project.mapper.PollMapper;
 import by.alexeysavchic.voter_pet_project.repository.PollRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
 import by.alexeysavchic.voter_pet_project.security.SecurityContextService;
 import by.alexeysavchic.voter_pet_project.serviceInterfaces.PollService;
+import jakarta.persistence.criteria.Join;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,52 +26,97 @@ public class PollServiceImpl implements PollService
     private final PollRepository pollRepository;
     private final PollMapper pollMapper;
 
-    public PollServiceImpl(SecurityContextService securityContextService, PollRepository pollRepository, PollMapper pollMapper)
-    {
+    public PollServiceImpl(SecurityContextService securityContextService, PollRepository pollRepository, PollMapper pollMapper) {
         this.securityContextService = securityContextService;
         this.pollRepository = pollRepository;
         this.pollMapper = pollMapper;
     }
 
+    private Specification<Poll> getIdSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.equal(root.get("id"),
+                request.getId());
+        };
+    }
+
+    private Specification<Poll> getQuestionSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.like(root.get("question"),
+                "%"+request.getQuestion()+"%");
+        };
+    }
+
+    private Specification<Poll> getDescriptionSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.like(root.get("description"),
+                "%"+request.getDescription()+"%");
+        };
+    }
+
+    private Specification<Poll> getStartDateSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.equal(root.get("creation_time"),
+                request.getCreationTime());
+        };
+    }
+
+    private Specification<Poll> getEndDateSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.equal(root.get("ending_time"),
+                request.getEndingTime());
+        };
+    }
+
+    private Specification<Poll> getPollCreatorSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {
+            Join<User, Poll> creatorName = root.join("users");
+            return criteriaBuilder.like(creatorName.get("username"), "%"+request.getUsername()+"%");
+        };
+    }
+
     @Override
     public List<GetPollResponse> getPolls(GetPollsRequest request)
     {
-        FilterPollRequset filter=request.getFilterPollRequset();
-        String condition=request.getCondition();
-        LocalDate dateCondition=request.getDateCondition();
-        if (((filter==FilterPollRequset.CREATED_BY || filter==FilterPollRequset.QUESTION || filter==FilterPollRequset.DESCRIPTION)
-        && condition==null) ||
-                ((filter==FilterPollRequset.CREATING_TIME || filter==FilterPollRequset.ENDING_TIME) && dateCondition==null))
+        Specification<Poll> specification=null;
+        if (request.getId()!=null)
         {
-            throw new WrongFilterConditionException();
+            specification=specification.and(getIdSpecification(request));
         }
-        List<GetPollResponse> response = new ArrayList<>();
-        List<Poll> polls= pollRepository.findAll();
-        switch (filter)
+        if (request.getQuestion()!=null)
         {
-            case QUESTION:
-                polls=polls.stream().filter(poll -> poll.getQuestion().contains(condition)).toList();
-                break;
-            case DESCRIPTION:
-                polls=polls.stream().filter(poll -> poll.getDescription().contains(condition)).toList();
-                break;
-            case CREATED_BY:
-                polls=polls.stream().filter(poll -> poll.getCreatedBy().getUsername().contains(condition)).toList();
-                break;
-            case CREATING_TIME:
-                polls=polls.stream().filter(poll -> poll.getCreationTime().toLocalDate().equals(dateCondition)).toList();
-                break;
-            case ENDING_TIME:
-                polls=polls.stream().filter(poll -> poll.getEndingTime().toLocalDate().equals(dateCondition)).toList();
-                break;
-            default:
-                break;
+            specification=specification.and(getQuestionSpecification(request));
         }
-        for (Poll poll:polls)
+        if (request.getDescription()!=null)
         {
-            response.add(pollMapper.pollToGetPollResponse(poll));
+            specification=specification.and(getDescriptionSpecification(request));
         }
-        return response;
+        if (request.getCreationTime()!=null)
+        {
+            specification=specification.and(getStartDateSpecification(request));
+        }
+        if (request.getEndingTime()!=null)
+        {
+            specification=specification.and(getEndDateSpecification(request));
+        }
+        if (request.getUsername()!=null)
+        {
+            specification=specification.and(getPollCreatorSpecification(request));
+        }
+        if(specification==null)
+        {
+           return pollMapper.ListPollToListGetPollResponse(pollRepository.findAll());
+        }
+        else
+        {
+           return pollMapper.ListPollToListGetPollResponse(pollRepository.findAll(specification));
+        }
     }
 
     @Override

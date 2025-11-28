@@ -34,7 +34,6 @@ public class GlobalExceptionHandler
             UserAlreadyVotedException.class,
             PollAlreadyEndedException.class,
             WrongPasswordException.class,
-            WrongFilterConditionException.class
     })
     public ResponseEntity<String> handleBusinessLogicExceptions(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());

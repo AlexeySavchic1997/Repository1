@@ -1,7 +1,6 @@
 package by.alexeysavchic.voter_pet_project.service;
 
 import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
-import by.alexeysavchic.voter_pet_project.dto.request.FilterUserRequest;
 import by.alexeysavchic.voter_pet_project.dto.request.GetUsersRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
@@ -11,11 +10,11 @@ import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
 import by.alexeysavchic.voter_pet_project.security.SecurityContextService;
 import by.alexeysavchic.voter_pet_project.serviceInterfaces.UserService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,6 +35,30 @@ public class UserServiceImpl implements UserService
         this.securityContextService = securityContextService;
     }
 
+    private Specification<User> getIdSpecification(GetUsersRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.equal(root.get("id"),
+                request.getId());
+        };
+    }
+
+    private Specification<User> getUsernameSpecification(GetUsersRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.like(root.get("username"),
+                "%"+request.getUsername()+"%");
+        };
+    }
+
+    private Specification<User> getEmailSpecification(GetUsersRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.like(root.get("email"),
+                "%"+request.getEmail()+"%");
+        };
+    }
+
     @Override
     public GetUserResponse findUserById(Long id)
     {
@@ -50,30 +73,27 @@ public class UserServiceImpl implements UserService
     @Override
     public List<GetUserResponse> getUsers(GetUsersRequest request)
     {
-        FilterUserRequest filter=request.getFilterUserRequest();
-        String condition = request.getCondition();
-        if (filter!=null && condition==null)
+        Specification<User> specification=null;
+        if (request.getId()!=null)
         {
-            throw new WrongFilterConditionException();
+            specification=specification.and(getIdSpecification(request));
         }
-        List<GetUserResponse> response = new ArrayList<>();
-        List<User> users= userRepository.findAll();
-        switch (filter)
+        if (request.getUsername()!=null)
         {
-            case USERNAME:
-                users=users.stream().filter(user -> (user.getUsername().contains(condition))).toList();
-                break;
-            case EMAIL:
-                users=users.stream().filter(user -> (user.getEmail().contains(condition))).toList();
-                break;
-            default:
-                break;
+            specification=specification.and(getUsernameSpecification(request));
         }
-        for(User user: users)
+        if (request.getUsername()!=null)
         {
-            response.add(userMapper.userToGetUserResponse(user));
+            specification=specification.and(getEmailSpecification(request));
         }
-        return response;
+        if(specification==null)
+        {
+            return userMapper.ListUsersToListGetUsersResponse(userRepository.findAll());
+        }
+        else
+        {
+            return userMapper.ListUsersToListGetUsersResponse(userRepository.findAll(specification));
+        }
     }
 
     @Override
