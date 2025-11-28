@@ -1,6 +1,8 @@
 package by.alexeysavchic.voter_pet_project.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +11,8 @@ import lombok.Setter;
 @Table(name = "votes")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Vote
 {
@@ -24,9 +28,4 @@ public class Vote
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    public Vote(Option option, User user) {
-        this.option = option;
-        this.user = user;
-    }
 }

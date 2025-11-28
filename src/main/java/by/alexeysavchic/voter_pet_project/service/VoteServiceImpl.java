@@ -12,6 +12,7 @@ import by.alexeysavchic.voter_pet_project.exception.PollAlreadyEndedException;
 import by.alexeysavchic.voter_pet_project.exception.PollNotExistException;
 import by.alexeysavchic.voter_pet_project.exception.UserAlreadyVotedException;
 import by.alexeysavchic.voter_pet_project.exception.UserNotFoundException;
+import by.alexeysavchic.voter_pet_project.mapper.VoteMapper;
 import by.alexeysavchic.voter_pet_project.repository.OptionRepository;
 import by.alexeysavchic.voter_pet_project.repository.PollRepository;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
@@ -35,12 +36,15 @@ public class VoteServiceImpl implements VoteService
 
     private final SecurityContextServiceImpl securityContextService;
 
-    public VoteServiceImpl(VoteRepository voteRepository, PollRepository pollRepository, UserRepository userRepository, OptionRepository optionRepository, SecurityContextServiceImpl securityContextService) {
+    private final VoteMapper voteMapper;
+
+    public VoteServiceImpl(VoteRepository voteRepository, PollRepository pollRepository, UserRepository userRepository, OptionRepository optionRepository, SecurityContextServiceImpl securityContextService, VoteMapper voteMapper) {
         this.voteRepository = voteRepository;
         this.pollRepository = pollRepository;
         this.userRepository = userRepository;
         this.optionRepository = optionRepository;
         this.securityContextService = securityContextService;
+        this.voteMapper = voteMapper;
     }
 
     @Override
@@ -65,14 +69,12 @@ public class VoteServiceImpl implements VoteService
        {
             throw new UserAlreadyVotedException();
        }
-       Vote vote = new Vote();
-       vote.setOption(option);
-       vote.setUser(user);
+       Vote vote = Vote.builder().option(option).user(user).build();
        user.addVote(vote);
        option.getVotes().add(vote);
        voteRepository.save(vote);
 
-       return new GetVoteResponse(poll.getQuestion(), option.getText());
+       return voteMapper.voteToGetVoteResponse(vote);
     }
 
 

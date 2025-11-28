@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetVoteResponse
 {
-    String pollName;
+    String user;
 
-    String OptionName;
+    String option;
 }

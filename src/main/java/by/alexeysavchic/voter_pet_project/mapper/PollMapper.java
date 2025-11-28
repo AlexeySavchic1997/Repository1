@@ -54,4 +54,6 @@ public abstract class PollMapper
     public abstract List<GetPollResponse> ListPollToListGetPollResponse(List<Poll> polls);
 
 
+
+
 }

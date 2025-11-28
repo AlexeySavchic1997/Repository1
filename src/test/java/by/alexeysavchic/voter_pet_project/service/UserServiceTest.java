@@ -1,7 +1,10 @@
 package by.alexeysavchic.voter_pet_project.service;
 import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
 import by.alexeysavchic.voter_pet_project.entity.User;
-import by.alexeysavchic.voter_pet_project.exception.*;
+
+import by.alexeysavchic.voter_pet_project.exception.OperationDeniedException;
+import by.alexeysavchic.voter_pet_project.exception.UserNotFoundException;
+import by.alexeysavchic.voter_pet_project.exception.WrongPasswordException;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.security.SecurityContextService;
 import org.junit.jupiter.api.DisplayName;
@@ -40,9 +43,9 @@ public class UserServiceTest
     @DisplayName("Find not existing user")
     void findNotExistingUser()
     {
-        when(userRepository.findUserByUsername("name")).thenReturn(null);
+        when(userRepository.findUserById(1L)).thenReturn(null);
 
-        assertThrows(UserNotFoundException.class,()->userService.findUser("name"));
+        assertThrows(UserNotFoundException.class,()->userService.findUserById(1L));
     }
 
 
