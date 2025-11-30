@@ -10,6 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -35,7 +38,7 @@ public class RoleServiceTest
     {
         request.setId(1L);
 
-        when(userRepository.findUserById(request.getId())).thenReturn(null);
+        when(userRepository.findUserById(request.getId())).thenReturn(Optional.ofNullable(null));
 
         assertThrows(UserNotFoundException.class,()->roleService.addRole(request));
         verify(userRepository, never()).save(any());

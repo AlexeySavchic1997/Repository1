@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -43,9 +44,9 @@ public class UserServiceTest
     @DisplayName("Find not existing user")
     void findNotExistingUser()
     {
-        when(userRepository.findUserById(1L)).thenReturn(null);
+        when(userRepository.findUserById(1L)).thenReturn(Optional.ofNullable(null));
 
-        assertThrows(UserNotFoundException.class,()->userService.findUserById(1L));
+        assertThrows(UsernameNotFoundException.class,()->userService.findUserById(1L));
     }
 
 
@@ -54,11 +55,13 @@ public class UserServiceTest
     void changePasswordWithWrongOldPassword()
     {
         ChangeCredentialsRequest request= new ChangeCredentialsRequest();
-        request.setUsername("name");
-        request.setEmail("email@gmail.com");
+
         User user = new User();
+        user.setId(1L);
+        user.setPassword("123456");
 
         when(securityContextService.getCurrentUser()).thenReturn(user);
+        when(userRepository.findUserById(1l)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(request.getOldPassword(), user.getPassword())).thenReturn(false);
 
         assertThrows(WrongPasswordException.class,()->userService.changeCredentials(request));
@@ -69,10 +72,10 @@ public class UserServiceTest
     @DisplayName("Delete user when user not exist")
     void deleteUserWhenUserAlreadyDeleted()
     {
-        when(userRepository.findUserById(1L)).thenReturn(null);
+        when(userRepository.findUserById(1L)).thenReturn(Optional.ofNullable(null));
 
         assertThrows(UserNotFoundException.class,()->userService.deleteUser(1L));
-        verify(userRepository, never()).delete(any());
+        verify(userRepository, never()).delete(any(User.class));
     }
 
     @Test
@@ -87,7 +90,7 @@ public class UserServiceTest
         when(securityContextService.getCurrentUser()).thenReturn(anotherUser);
 
         assertThrows(OperationDeniedException.class,()->userService.deleteUser(1L));
-        verify(userRepository, never()).delete(any());
+        verify(userRepository, never()).delete(any(User.class));
     }
 
 

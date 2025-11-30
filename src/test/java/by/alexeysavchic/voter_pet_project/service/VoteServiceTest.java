@@ -36,7 +36,7 @@ public class VoteServiceTest
     {
         VoteRequest voteRequest = new VoteRequest();
         voteRequest.setPollName("name");
-        when(pollRepository.findPollByQuestion("name")).thenReturn(null);
+        when(pollRepository.findPollByQuestion("name")).thenReturn(Optional.ofNullable(null));
 
         assertThrows(PollNotExistException.class, () -> voteService.voting(voteRequest));
     }
@@ -95,7 +95,7 @@ public class VoteServiceTest
     @DisplayName("Voting when option not found")
     public void VoteCountingWhenPollNotExist()
     {
-        when(pollRepository.findPollByQuestion("question name")).thenReturn(null);
+        when(pollRepository.findPollByQuestion("question name")).thenReturn(Optional.ofNullable(null));
 
         assertThrows(PollNotExistException.class, ()->voteService.voteCounting("question name"));
     }

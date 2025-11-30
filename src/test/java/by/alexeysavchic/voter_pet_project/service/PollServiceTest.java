@@ -53,11 +53,11 @@ public class PollServiceTest
     @DisplayName("Delete poll which doesn't exist")
     public void deleteNotExistingPoll()
     {
-        Long id = 1L;
-        when(pollRepository.findPollById(id)).thenReturn(null);
+        Poll poll=null;
+        when(pollRepository.findPollById(1L)).thenReturn(Optional.ofNullable(null));
 
-        assertThrows(PollNotExistException.class, ()->pollService.deletePoll(id));
-        verify(pollRepository, never()).delete(any());
+        assertThrows(PollNotExistException.class, ()->pollService.deletePoll(1L));
+        verify(pollRepository, never()).delete(any(Poll.class));
     }
 
     @Test
@@ -78,6 +78,6 @@ public class PollServiceTest
 
         assertThrows(OperationDeniedException.class, ()->pollService.deletePoll(1L));
 
-        verify(pollRepository, never()).delete(any());
+        verify(pollRepository, never()).delete(any(Poll.class));
     }
 }
