@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetCountingResponse
 {
-    String option;
+    private String option;
 
-    Integer count;
+    private Integer count;
 }

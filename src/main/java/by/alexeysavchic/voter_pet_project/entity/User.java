@@ -73,12 +73,4 @@ public class User
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
-    public void addVote(Vote vote)
-    {
-        votes.add(vote);
-    }
-
-    public void addRole(Role role) { this.roles.add(role); }
-    public void removeRole(Role role) { this.roles.remove(role); }
-    public boolean hasRole(Role role) { return this.roles.contains(role); }
 }

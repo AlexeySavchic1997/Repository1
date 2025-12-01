@@ -27,7 +27,7 @@ public class RoleServiceImpl implements RoleService
         User user = userRepository.findUserById(request.getId()).orElseThrow(()->
                 new UserNotFoundException());
 
-        user.addRole(request.getRole());
+        user.getRoles().add(request.getRole());
         userRepository.save(user);
 
         return userMapper.userToGetUserResponse(user);
@@ -39,7 +39,7 @@ public class RoleServiceImpl implements RoleService
         User user = userRepository.findUserById(request.getId()).orElseThrow(()->
                 new UserNotFoundException());
 
-        user.removeRole(request.getRole());
+        user.getRoles().remove(request.getRole());
         userRepository.save(user);
         GetUserResponse response=userMapper.userToGetUserResponse(user);
 

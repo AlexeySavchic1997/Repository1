@@ -4,7 +4,9 @@ import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
 import by.alexeysavchic.voter_pet_project.dto.request.GetUsersRequest;
 import by.alexeysavchic.voter_pet_project.dto.response.GetUserResponse;
 import by.alexeysavchic.voter_pet_project.entity.User;
-import by.alexeysavchic.voter_pet_project.exception.*;
+import by.alexeysavchic.voter_pet_project.exception.OperationDeniedException;
+import by.alexeysavchic.voter_pet_project.exception.UserNotFoundException;
+import by.alexeysavchic.voter_pet_project.exception.WrongPasswordException;
 import by.alexeysavchic.voter_pet_project.mapper.UserMapper;
 import by.alexeysavchic.voter_pet_project.repository.UserRepository;
 import by.alexeysavchic.voter_pet_project.security.Role;
@@ -125,7 +127,7 @@ public class UserServiceImpl implements UserService
         User user = userRepository.findUserById(id).orElseThrow(()->
                 new UserNotFoundException());
 
-        if ((securityContextService.getCurrentUser().hasRole(Role.ROLE_ADMIN))||
+        if ((securityContextService.getCurrentUser().getRoles().contains(Role.ROLE_ADMIN))||
         securityContextService.getCurrentUser().equals(user))
         {
             userRepository.delete(user);

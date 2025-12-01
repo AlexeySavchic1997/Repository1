@@ -19,6 +19,4 @@ public class GetUserResponse
     private String email;
 
     private Set<Role> roles;
-
-    public boolean hasRole(Role role) { return this.roles.contains(role); }
 }

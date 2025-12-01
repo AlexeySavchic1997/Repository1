@@ -4,7 +4,7 @@ public final class ErrorMessages
 {
     public final static String operationDenied= "operation denied";
 
-    public static final String optionNotFound= "option not found";
+    public final static String optionNotFound= "option not found";
 
     public final static String pollAlreadyEnded= "poll already ended";
 

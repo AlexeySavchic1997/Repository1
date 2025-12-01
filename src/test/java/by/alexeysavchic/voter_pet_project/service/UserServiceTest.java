@@ -1,7 +1,7 @@
 package by.alexeysavchic.voter_pet_project.service;
+
 import by.alexeysavchic.voter_pet_project.dto.request.ChangeCredentialsRequest;
 import by.alexeysavchic.voter_pet_project.entity.User;
-
 import by.alexeysavchic.voter_pet_project.exception.OperationDeniedException;
 import by.alexeysavchic.voter_pet_project.exception.UserNotFoundException;
 import by.alexeysavchic.voter_pet_project.exception.WrongPasswordException;
@@ -15,12 +15,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest

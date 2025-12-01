@@ -140,8 +140,8 @@ public class PollServiceImpl implements PollService
         Poll poll = pollRepository.findPollById(id).orElseThrow(()->new PollNotExistException());
 
         if ((securityContextService.getCurrentUser().equals(poll.getCreatedBy()))||
-                (securityContextService.getCurrentUser().hasRole(Role.ROLE_ADMIN))||
-        securityContextService.getCurrentUser().hasRole(Role.ROLE_MODERATOR))
+                (securityContextService.getCurrentUser().getRoles().contains(Role.ROLE_ADMIN))||
+        securityContextService.getCurrentUser().getRoles().contains(Role.ROLE_MODERATOR))
         {
             pollRepository.delete(poll);
         }

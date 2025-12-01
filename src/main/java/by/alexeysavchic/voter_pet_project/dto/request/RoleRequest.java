@@ -12,7 +12,7 @@ import lombok.Setter;
 public class RoleRequest
 {
 
-    Long id;
+    private Long id;
 
     @NotNull(message = "Role is required")
     private Role role;

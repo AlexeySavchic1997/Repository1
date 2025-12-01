@@ -15,8 +15,8 @@ public class VoteRequest
 {
     @NotBlank
     @Size(min = 2, max = 100, message = "question must be between 2 and 100 symbols")
-    String pollName;
+    private String pollName;
 
     @NotBlank
-    String optionName;
+    private String optionName;
 }

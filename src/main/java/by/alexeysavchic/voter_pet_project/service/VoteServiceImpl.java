@@ -20,8 +20,11 @@ import by.alexeysavchic.voter_pet_project.repository.VoteRepository;
 import by.alexeysavchic.voter_pet_project.security.SecurityContextServiceImpl;
 import by.alexeysavchic.voter_pet_project.serviceInterfaces.VoteService;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class VoteServiceImpl implements VoteService
@@ -53,7 +56,7 @@ public class VoteServiceImpl implements VoteService
        Poll poll = pollRepository.findPollByQuestion(voteRequest.getPollName()).
                orElseThrow(()->new PollNotExistException());
 
-       if (!poll.isActive())
+       if (LocalDateTime.now().isAfter(poll.getEndingTime()))
        {
            throw new PollAlreadyEndedException();
        }
@@ -70,7 +73,7 @@ public class VoteServiceImpl implements VoteService
             throw new UserAlreadyVotedException();
        }
        Vote vote = Vote.builder().option(option).user(user).build();
-       user.addVote(vote);
+       user.getVotes().add(vote);
        option.getVotes().add(vote);
        voteRepository.save(vote);
 
