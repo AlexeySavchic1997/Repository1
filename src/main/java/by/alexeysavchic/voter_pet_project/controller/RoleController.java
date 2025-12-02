@@ -27,7 +27,7 @@ public class RoleController
         return roleService.addRole(request);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     public GetUserResponse removeRole(@RequestBody RoleRequest request)
     {
         return roleService.removeRole(request);

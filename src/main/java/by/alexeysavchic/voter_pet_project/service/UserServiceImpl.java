@@ -37,30 +37,6 @@ public class UserServiceImpl implements UserService
         this.securityContextService = securityContextService;
     }
 
-    private Specification<User> getIdSpecification(GetUsersRequest request)
-    {
-        return (root, query, criteriaBuilder) ->
-        {return criteriaBuilder.equal(root.get("id"),
-                request.getId());
-        };
-    }
-
-    private Specification<User> getUsernameSpecification(GetUsersRequest request)
-    {
-        return (root, query, criteriaBuilder) ->
-        {return criteriaBuilder.like(root.get("username"),
-                "%"+request.getUsername()+"%");
-        };
-    }
-
-    private Specification<User> getEmailSpecification(GetUsersRequest request)
-    {
-        return (root, query, criteriaBuilder) ->
-        {return criteriaBuilder.like(root.get("email"),
-                "%"+request.getEmail()+"%");
-        };
-    }
-
     @Override
     public GetUserResponse findUserById(Long id)
     {
@@ -136,6 +112,30 @@ public class UserServiceImpl implements UserService
         {
             throw new OperationDeniedException();
         }
+    }
+
+    private Specification<User> getIdSpecification(GetUsersRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.equal(root.get("id"),
+                request.getId());
+        };
+    }
+
+    private Specification<User> getUsernameSpecification(GetUsersRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.like(root.get("username"),
+                "%"+request.getUsername()+"%");
+        };
+    }
+
+    private Specification<User> getEmailSpecification(GetUsersRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.like(root.get("email"),
+                "%"+request.getEmail()+"%");
+        };
     }
 
 

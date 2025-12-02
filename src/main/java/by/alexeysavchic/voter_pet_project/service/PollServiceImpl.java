@@ -32,55 +32,6 @@ public class PollServiceImpl implements PollService
         this.pollMapper = pollMapper;
     }
 
-    private Specification<Poll> getIdSpecification(GetPollsRequest request)
-    {
-        return (root, query, criteriaBuilder) ->
-        {return criteriaBuilder.equal(root.get("id"),
-                request.getId());
-        };
-    }
-
-    private Specification<Poll> getQuestionSpecification(GetPollsRequest request)
-    {
-        return (root, query, criteriaBuilder) ->
-        {return criteriaBuilder.like(root.get("question"),
-                "%"+request.getQuestion()+"%");
-        };
-    }
-
-    private Specification<Poll> getDescriptionSpecification(GetPollsRequest request)
-    {
-        return (root, query, criteriaBuilder) ->
-        {return criteriaBuilder.like(root.get("description"),
-                "%"+request.getDescription()+"%");
-        };
-    }
-
-    private Specification<Poll> getStartDateSpecification(GetPollsRequest request)
-    {
-        return (root, query, criteriaBuilder) ->
-        {return criteriaBuilder.equal(root.get("creation_time"),
-                request.getCreationTime());
-        };
-    }
-
-    private Specification<Poll> getEndDateSpecification(GetPollsRequest request)
-    {
-        return (root, query, criteriaBuilder) ->
-        {return criteriaBuilder.equal(root.get("ending_time"),
-                request.getEndingTime());
-        };
-    }
-
-    private Specification<Poll> getPollCreatorSpecification(GetPollsRequest request)
-    {
-        return (root, query, criteriaBuilder) ->
-        {
-            Join<User, Poll> creatorName = root.join("users");
-            return criteriaBuilder.like(creatorName.get("username"), "%"+request.getUsername()+"%");
-        };
-    }
-
     @Override
     public List<GetPollResponse> getPolls(GetPollsRequest request)
     {
@@ -149,6 +100,55 @@ public class PollServiceImpl implements PollService
         {
             throw new OperationDeniedException();
         }
+    }
+
+    private Specification<Poll> getIdSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.equal(root.get("id"),
+                request.getId());
+        };
+    }
+
+    private Specification<Poll> getQuestionSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.like(root.get("question"),
+                "%"+request.getQuestion()+"%");
+        };
+    }
+
+    private Specification<Poll> getDescriptionSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.like(root.get("description"),
+                "%"+request.getDescription()+"%");
+        };
+    }
+
+    private Specification<Poll> getStartDateSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.equal(root.get("creation_time"),
+                request.getCreationTime());
+        };
+    }
+
+    private Specification<Poll> getEndDateSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {return criteriaBuilder.equal(root.get("ending_time"),
+                request.getEndingTime());
+        };
+    }
+
+    private Specification<Poll> getPollCreatorSpecification(GetPollsRequest request)
+    {
+        return (root, query, criteriaBuilder) ->
+        {
+            Join<User, Poll> creatorName = root.join("users");
+            return criteriaBuilder.like(creatorName.get("username"), "%"+request.getUsername()+"%");
+        };
     }
 
 }

@@ -8,26 +8,18 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.ERROR)
 public abstract class VoteMapper
 {
     public abstract GetVoteResponse voteToGetVoteResponse(Vote vote);
 
     protected String  UserToString(User user)
     {
-        if (user==null)
-        {
-            return null;
-        }
-    return user.getUsername();
+        return user==null?null:user.getUsername();
     }
 
     protected String  OptionToString(Option option)
     {
-        if (option==null)
-        {
-            return null;
-        }
-        return option.getText();
+        return option==null?null:option.getText();
     }
 }

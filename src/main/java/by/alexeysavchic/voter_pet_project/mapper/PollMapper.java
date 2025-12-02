@@ -11,12 +11,11 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class},
-        imports = {LocalDateTime.class}, unmappedTargetPolicy = ReportingPolicy.WARN)
+        imports = {LocalDateTime.class}, unmappedTargetPolicy = ReportingPolicy.ERROR)
 public abstract class PollMapper
 {
     @Autowired
@@ -28,12 +27,7 @@ public abstract class PollMapper
 
     protected Option stringToOption(String text)
     {
-        if (text==null)
-        {
-            return null;
-        }
-        Option option = Option.builder().text(text).build();
-        return option;
+        return text==null?null:Option.builder().text(text).build();
     }
 
     @AfterMapping
